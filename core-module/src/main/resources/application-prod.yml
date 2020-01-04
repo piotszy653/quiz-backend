@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL81Dialect
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prod_quiz
+    driverClassName: org.postgresql.Driver
+    username: QuizUser
+    password: quiz_password
+  liquibase:
+    contexts: prod
+    change-log: classpath:db/db.changelog-master.xml
+    enabled: true
+
+mail:
+  host: smtp.gmail.com
+  username: testujemyGrailsy@gmail.com
+  password: GrailsyMaile
+  auth: true
+  starttls: true
+  port: 587
+  template:
+    registration: registrationMail_en
+    reset-password: resetPasswordMail_en
+    logo: #TODO

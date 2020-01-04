@@ -1,0 +1,91 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-1">
+        <createTable tableName="reset_password_token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="reset_password_tokenPK"/>
+            </column>
+            <column name="expiration_time" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-2">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="rolePK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-3">
+        <createTable tableName="role_group">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="role_groupPK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-4">
+        <createTable tableName="role_group_roles">
+            <column name="role_group_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roles_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-5">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="userPK"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_group_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-6">
+        <addUniqueConstraint columnNames="uuid" constraintName="UC_RESET_PASSWORD_TOKENUUID_COL" tableName="reset_password_token"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-7">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ROLENAME_COL" tableName="role"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-8">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ROLE_GROUPNAME_COL" tableName="role_group"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-9">
+        <addUniqueConstraint columnNames="username" constraintName="UC_USERUSERNAME_COL" tableName="user"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-10">
+        <addForeignKeyConstraint baseColumnNames="role_group_id" baseTableName="user" constraintName="FK1gp1fsio20v16nkojgfq15gcg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="role_group"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-11">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="reset_password_token" constraintName="FK94cn6btr2shk6vpldr75i0u0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-12">
+        <addForeignKeyConstraint baseColumnNames="role_group_id" baseTableName="role_group_roles" constraintName="FKlynexiqck74g4t1tawgp6bty3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="role_group"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578167825318-13">
+        <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="role_group_roles" constraintName="FKo9wqoh87iq3g9wpa573nd6y4m" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+</databaseChangeLog>

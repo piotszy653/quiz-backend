@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  liquibase:
+    enabled: false
+  messages:
+    basename: i18n-core/messages
+    cache-duration: -1
+    encoding: ISO-8859-2
+    fallback-to-system-locale: true
+
+  servlet:
+    multipart:
+      max-file-size: 3MB
+
+jwt:
+  tokenExpirationTime: 3600 # = 1 hour
+  refreshTokenExpTime: 86400 # = 1 day
+  tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
+
+
+frontend:
+  url: "https://localhost:8081/#"
+
+info.app:
+  name: quiz
+
+management:
+  endpoints:
+    web.exposure.include: health, info, loggers
+
+reset-password-token:
+  expirationTime: 900000
+
+endpoints:
+  resetPassword: "/reset-password"
