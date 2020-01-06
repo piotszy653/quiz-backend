@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum DefaultUsersEnum {
-    ADMIN("admin@quiz.com", "admin", RolesEnum.ADMIN, true),
-    USER("user@quiz.com", "user", RolesEnum.USER, true);
+    ADMIN("admin@quizmaker.com", "admin", RolesEnum.ADMIN, true),
+    USER("user@quizmaker.com", "user", RolesEnum.USER, true);
 
     public final String username;
     public final String password;

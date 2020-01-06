@@ -34,3 +34,11 @@ reset-password-token:
 
 endpoints:
   resetPassword: "/reset-password"
+
+storage:
+  main: "storage"
+  image: "images"
+
+images:
+  maxWidth: 324
+  maxHeight: 405
