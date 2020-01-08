@@ -12,7 +12,7 @@ public class InternationalizationConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.addBasenames("classpath:i18n-user/messages", "classpath:i18n-core/messages", "classpath:i18n-storage/messages");
+        messageSource.addBasenames("classpath:i18n-user/messages", "classpath:i18n-core/messages", "classpath:i18n-storage/messages", "classpath:i18n-quiz/messages");
         messageSource.setCacheSeconds(10); //reload messages every 10 seconds
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;

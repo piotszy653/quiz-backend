@@ -134,6 +134,10 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("current_user.not_found.username", new Object[]{userContext.getUsername()}, null)));
     }
 
+    public UUID getCurrentUserUuid(){
+        return getCurrentUser().getUuid();
+    }
+
     public void currentUserValidation(long userId) {
         if (!isCurrentUsersId(userId)) {
             throw new IllegalArgumentException(messageSource.getMessage("user.current_user_required", new Object[]{Long.toString(userId)}, null));
