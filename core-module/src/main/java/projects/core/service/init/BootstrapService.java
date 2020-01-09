@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import projects.core.config.enums.roles.RolesEnum;
+import projects.quiz.repository.AssessmentRepository;
+import projects.quiz.service.AssessmentService;
 import projects.user.model.roles.Role;
 import projects.user.model.roles.RoleGroup;
 import projects.user.repository.roles.RoleGroupRepository;
@@ -30,6 +32,8 @@ public abstract class BootstrapService {
     protected final UserRepository userRepository;
 
     protected final BootstrapPartService bootstrapPartService;
+
+    protected final AssessmentRepository assessmentRepository;
 
     public abstract void setup();
 

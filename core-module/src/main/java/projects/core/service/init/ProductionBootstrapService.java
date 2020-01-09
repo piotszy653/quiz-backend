@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import projects.core.config.enums.bootstrap.userModule.DefaultAdminEnum;
+import projects.quiz.repository.AssessmentRepository;
+import projects.quiz.service.AssessmentService;
 import projects.user.model.user.User;
 import projects.user.repository.roles.RoleGroupRepository;
 import projects.user.repository.roles.RoleRepository;
@@ -20,9 +22,9 @@ public class ProductionBootstrapService extends BootstrapService {
 
     @Builder
     public ProductionBootstrapService(RoleGroupRepository roleGroupRepository, RoleRepository roleRepository, UserRepository userRepository,
-                                      BootstrapPartService bootstrapPartService
+                                      BootstrapPartService bootstrapPartService, AssessmentRepository assessmentRepository
     ) {
-        super(roleGroupRepository, roleRepository, userRepository, bootstrapPartService);
+        super(roleGroupRepository, roleRepository, userRepository, bootstrapPartService, assessmentRepository);
     }
 
     @Override

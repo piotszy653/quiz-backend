@@ -1,0 +1,129 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-1">
+        <createTable tableName="answer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="answerPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-2">
+        <createTable tableName="open_question">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="open_questionPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assessment_id" type="BIGINT"/>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-3">
+        <createTable tableName="test_question">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="test_questionPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assessment_id" type="BIGINT"/>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-4">
+        <createTable tableName="test_question_answers">
+            <column name="test_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answers_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-5">
+        <createTable tableName="true_false_question">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="true_false_questionPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="question" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assessment_id" type="BIGINT"/>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-6">
+        <addPrimaryKey columnNames="test_question_id, answers_id" tableName="test_question_answers"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-7">
+        <addForeignKeyConstraint baseColumnNames="test_question_id" baseTableName="test_question_answers" constraintName="FK1qsgwv2jdueikc7fj63t8mata" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="test_question"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-8">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="open_question" constraintName="FK2i45icd5mkmi7r8sxh0amasq3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-9">
+        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="test_question" constraintName="FK2k5tsqqxf7st3023y6j7x1qbd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-10">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="answer" constraintName="FK9y2tv8kivatrovnl66rs72ncp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-11">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="test_question" constraintName="FKkmd2b0mxqo1dsqb28ysfqnica" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-12">
+        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="open_question" constraintName="FKl5b3dbksq5x16i8co6kjuyl3t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-13">
+        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="true_false_question" constraintName="FKn6cejrpfhydgq4ug38xn4v5bs" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-14">
+        <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="test_question_answers" constraintName="FKoalbe28mxy7yhwmm5xgjcqv32" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="answer"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578586884419-15">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="true_false_question" constraintName="FKqnj5fs3t191icgimjn7q6camq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+</databaseChangeLog>

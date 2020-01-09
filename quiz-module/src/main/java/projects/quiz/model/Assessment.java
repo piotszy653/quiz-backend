@@ -23,7 +23,7 @@ import java.util.UUID;
 public class Assessment extends AbstractBaseEntity<Long> implements AssessmentDto {
 
     @Size(max = 255, message = "name.max:255")
-    private String name;
+    private String name = "";
 
     @Column(nullable = false)
     @NotNull(message = "{uuid.not_null}")
