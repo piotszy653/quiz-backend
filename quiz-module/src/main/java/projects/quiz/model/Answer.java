@@ -3,7 +3,9 @@ package projects.quiz.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
+import projects.quiz.dto.answer.AnswerDto;
 import projects.storage.model.FileData;
 
 import javax.persistence.Column;
@@ -20,12 +22,13 @@ import static javax.persistence.FetchType.EAGER;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Answer extends AbstractBaseEntity<Long>{
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     @NotBlank(message = "{answer.not_blank}")
-    @Size(max = 255, message = "name.max:255")
+    @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
     @NotNull(message = "{owner_uuid.not_null}")
@@ -35,4 +38,10 @@ public class Answer extends AbstractBaseEntity<Long>{
 
     @ManyToOne(fetch = EAGER)
     FileData imageData;
+
+    public Answer(AnswerDto dto, UUID ownerUuid, FileData imageData){
+        this.answer = dto.getAnswer();
+        this.ownerUuid = ownerUuid;
+        this.imageData = imageData;
+    }
 }

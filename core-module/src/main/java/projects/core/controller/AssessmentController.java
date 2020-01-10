@@ -11,10 +11,9 @@ import projects.quiz.dto.assessment.AssessmentCreateDto;
 import projects.quiz.dto.assessment.AssessmentUpdateDto;
 import projects.quiz.model.Assessment;
 import projects.quiz.service.AssessmentService;
-import projects.user.model.user.User;
 
 import javax.validation.Valid;
-import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.UUID;
 
 @RestController
@@ -37,7 +36,7 @@ public class AssessmentController {
     @Secured("ROLE_ASSESSMENT_READ")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Set<Assessment> getByOwner() {
+    public LinkedHashSet<Assessment> getByOwner() {
         return coreAssessmentService.getByOwner();
     }
 

@@ -8,7 +8,7 @@
             <column name="uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="answer" type="VARCHAR(255)">
+            <column name="answer" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
             <column name="owner_uuid" type="UUID">

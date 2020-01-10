@@ -9,7 +9,7 @@ import projects.quiz.model.Assessment;
 import projects.quiz.service.AssessmentService;
 import projects.user.service.UserService;
 
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +21,7 @@ public class CoreAssessmentService {
 
     private AssessmentService assessmentService;
 
-    public Set<Assessment> getByOwner() {
+    public LinkedHashSet<Assessment> getByOwner() {
         return assessmentService.getByOwnerUuid(userService.getCurrentUserUuid());
     }
 

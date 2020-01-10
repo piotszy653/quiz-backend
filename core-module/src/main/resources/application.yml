@@ -23,7 +23,7 @@ frontend:
   url: "https://localhost:8081/#"
 
 info.app:
-  name: quiz
+  name: QuizMaker
 
 management:
   endpoints:

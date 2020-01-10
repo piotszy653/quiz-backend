@@ -24,7 +24,7 @@ public interface IFileData {
     }
 
     default String getDefaultDirectory(){
-        return Paths.get(System.getProperty("user.home"), "uDrink","test").toString();
+        return Paths.get(System.getProperty("user.home"), "QuizMaker","test").toString();
     }
 
     default FileData getDefaultFileData(UUID uuid){
