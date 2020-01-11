@@ -11,10 +11,8 @@ import projects.quiz.repository.AnswerRepository;
 import projects.storage.model.FileData;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,6 +34,11 @@ public class AnswerService {
                 .orElseThrow(() -> new NoSuchElementException(notFoundByUuidMessage(uuid)));
     }
 
+    public LinkedHashSet<Answer> getAllByUuids(Collection<String> uuidStringSet){
+        Iterable<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
+        return answerRepository.findAllByUuid(uuids);
+    }
+
     public LinkedHashSet<Answer> getByOwnerUuid(UUID ownerUuid) {
         return answerRepository.findAllByOwnerUuid(ownerUuid);
     }
@@ -43,6 +46,19 @@ public class AnswerService {
     @Transactional
     public Answer create(AnswerDto answerDto, UUID ownerUuid, FileData imageData){
         return save(new Answer(answerDto, ownerUuid, imageData));
+    }
+
+    @Transactional
+    public LinkedHashSet<Answer> createAll(Collection<AnswerDto> dtoSet, UUID ownerUuid, HashMap<String, FileData> imagesData){
+        return dtoSet.stream()
+                .map(dto ->
+                        create(
+                                dto,
+                                ownerUuid,
+                                imagesData.get(dto.getImageUuid())
+                        )
+                )
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Transactional

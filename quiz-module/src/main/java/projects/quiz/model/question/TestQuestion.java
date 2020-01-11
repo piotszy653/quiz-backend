@@ -1,24 +1,22 @@
 package projects.quiz.model.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.validation.annotation.Validated;
+import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
 import projects.quiz.model.Answer;
-import projects.quiz.model.Assessment;
 import projects.quiz.utils.enums.QuestionType;
-import projects.quiz.utils.validator.question.TestQuestionType;
 import projects.storage.model.FileData;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -31,9 +29,16 @@ public class TestQuestion extends Question {
     @Size(min = 2, message = "answers.min:2")
     private Set<Answer> answers;
 
-    public TestQuestion(String question, UUID ownerUuid, FileData imageData, @Valid @TestQuestionType QuestionType type, Assessment assessment, LinkedHashSet<Answer> answers){
-        super(question, ownerUuid, imageData, type, assessment);
+    private HashMap<UUID, Boolean> answersCorrectness;
+
+    private boolean isMultipleChoice;
+
+
+    public TestQuestion(String question, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers, HashMap<UUID, Boolean> answersCorrectness, boolean isMultipleChoice) {
+        super(question, ownerUuid, imageData, QuestionType.TEST);
         this.answers = answers;
+        this.answersCorrectness = answersCorrectness;
+        this.isMultipleChoice = isMultipleChoice;
     }
 
 }

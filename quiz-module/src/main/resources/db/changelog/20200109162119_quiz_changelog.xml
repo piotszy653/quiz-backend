@@ -34,10 +34,9 @@
             <column name="type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="answer" type="VARCHAR(255)">
+            <column name="answer" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
-            <column name="assessment_id" type="BIGINT"/>
             <column name="image_data_id" type="BIGINT"/>
         </createTable>
     </changeSet>
@@ -58,7 +57,6 @@
             <column name="type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="assessment_id" type="BIGINT"/>
             <column name="image_data_id" type="BIGINT"/>
         </createTable>
     </changeSet>
@@ -92,7 +90,6 @@
             <column name="answer" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="assessment_id" type="BIGINT"/>
             <column name="image_data_id" type="BIGINT"/>
         </createTable>
     </changeSet>
@@ -105,20 +102,11 @@
     <changeSet author="Piotr Szymański (generated)" id="1578586884419-8">
         <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="open_question" constraintName="FK2i45icd5mkmi7r8sxh0amasq3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
     </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1578586884419-9">
-        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="test_question" constraintName="FK2k5tsqqxf7st3023y6j7x1qbd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
-    </changeSet>
     <changeSet author="Piotr Szymański (generated)" id="1578586884419-10">
         <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="answer" constraintName="FK9y2tv8kivatrovnl66rs72ncp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
     </changeSet>
     <changeSet author="Piotr Szymański (generated)" id="1578586884419-11">
         <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="test_question" constraintName="FKkmd2b0mxqo1dsqb28ysfqnica" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
-    </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1578586884419-12">
-        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="open_question" constraintName="FKl5b3dbksq5x16i8co6kjuyl3t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
-    </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1578586884419-13">
-        <addForeignKeyConstraint baseColumnNames="assessment_id" baseTableName="true_false_question" constraintName="FKn6cejrpfhydgq4ug38xn4v5bs" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
     </changeSet>
     <changeSet author="Piotr Szymański (generated)" id="1578586884419-14">
         <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="test_question_answers" constraintName="FKoalbe28mxy7yhwmm5xgjcqv32" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="answer"/>

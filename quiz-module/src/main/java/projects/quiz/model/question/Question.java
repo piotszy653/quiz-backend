@@ -3,7 +3,6 @@ package projects.quiz.model.question;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import projects.quiz.model.AbstractBaseEntity;
-import projects.quiz.model.Assessment;
 import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
@@ -45,8 +44,7 @@ public abstract class Question extends AbstractBaseEntity<Long> {
     @Setter(AccessLevel.NONE)
     QuestionType type;
 
-    @NotNull(message = "{assessment.not_null}")
-    @ManyToOne(fetch = EAGER)
-    Assessment assessment;
-
+    public void removeImage(){
+        imageData = null;
+    }
 }
