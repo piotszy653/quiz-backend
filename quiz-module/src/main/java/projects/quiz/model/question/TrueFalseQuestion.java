@@ -2,6 +2,7 @@ package projects.quiz.model.question;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import projects.quiz.dto.question.trueFalseQuestion.TrueFalseQuestionCreateDto;
 import projects.storage.model.FileData;
 
@@ -13,6 +14,7 @@ import static projects.quiz.utils.enums.QuestionType.TRUE_FALSE;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@NoArgsConstructor
 public class TrueFalseQuestion extends Question {
 
     private boolean answer;

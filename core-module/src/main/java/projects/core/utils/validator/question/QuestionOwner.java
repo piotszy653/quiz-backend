@@ -1,4 +1,4 @@
-package projects.core.utils.validator.assessment;
+package projects.core.utils.validator.question;
 
 
 import projects.core.config.enums.roles.RolesEnum;
@@ -10,10 +10,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = AssessmentOwnerValidator.class)
+@Constraint(validatedBy = QuestionOwnerValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AssessmentOwner {
+public @interface QuestionOwner {
     RolesEnum[] roles() default {};
 
     String message() default "{forbidden}";

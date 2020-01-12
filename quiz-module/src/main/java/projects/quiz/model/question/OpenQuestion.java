@@ -2,6 +2,7 @@ package projects.quiz.model.question;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.storage.model.FileData;
 
@@ -16,6 +17,7 @@ import static projects.quiz.utils.enums.QuestionType.OPEN;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@NoArgsConstructor
 public class OpenQuestion extends Question {
 
     @Column(nullable = false)

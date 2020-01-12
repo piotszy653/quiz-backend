@@ -17,6 +17,9 @@ public class AnswersExistValidator implements ConstraintValidator<AnswersExist, 
     @Override
     public boolean isValid(HashMap<String, Boolean> uuids, ConstraintValidatorContext constraintValidatorContext) {
 
+        if(uuids == null)
+            return true;
+
         uuids.keySet().forEach(uuid -> answerService.getByUuid(UUID.fromString(uuid)));
 
         return true;

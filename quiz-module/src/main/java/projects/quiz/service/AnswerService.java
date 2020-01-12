@@ -35,7 +35,9 @@ public class AnswerService {
     }
 
     public LinkedHashSet<Answer> getAllByUuids(Collection<String> uuidStringSet){
-        Iterable<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
+        Set<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
+        if(uuids.isEmpty())
+            return new LinkedHashSet<>();
         return answerRepository.findAllByUuid(uuids);
     }
 
@@ -46,19 +48,6 @@ public class AnswerService {
     @Transactional
     public Answer create(AnswerDto answerDto, UUID ownerUuid, FileData imageData){
         return save(new Answer(answerDto, ownerUuid, imageData));
-    }
-
-    @Transactional
-    public LinkedHashSet<Answer> createAll(Collection<AnswerDto> dtoSet, UUID ownerUuid, HashMap<String, FileData> imagesData){
-        return dtoSet.stream()
-                .map(dto ->
-                        create(
-                                dto,
-                                ownerUuid,
-                                imagesData.get(dto.getImageUuid())
-                        )
-                )
-                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Transactional

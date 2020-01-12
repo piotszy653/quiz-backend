@@ -17,8 +17,8 @@ public class OpenQuestionUpdateDto extends QuestionUpdateDto {
     @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
-    public OpenQuestionUpdateDto(String question, String answer){
-        super(question);
+    public OpenQuestionUpdateDto(String question, String imageUuid, String answer){
+        super(question, imageUuid);
         this.answer = answer;
     }
 }

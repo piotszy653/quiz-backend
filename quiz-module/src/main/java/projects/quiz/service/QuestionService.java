@@ -45,17 +45,17 @@ public class QuestionService {
 
     private final AnswerService answerService;
 
-    private OpenQuestion getOpenQuestionByUuid(UUID uuid){
+    private OpenQuestion getOpenQuestionByUuid(UUID uuid) {
         return openQuestionRepository.findByUuid(uuid)
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
 
-    private TrueFalseQuestion getTrueFalseQuestionByUuid(UUID uuid){
+    private TrueFalseQuestion getTrueFalseQuestionByUuid(UUID uuid) {
         return trueFalseQuestionRepository.findByUuid(uuid)
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
 
-    private TestQuestion getTestQuestionByUuid(UUID uuid){
+    private TestQuestion getTestQuestionByUuid(UUID uuid) {
         return testQuestionRepository.findByUuid(uuid)
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
@@ -63,18 +63,18 @@ public class QuestionService {
     public Question getByUuid(UUID uuid) {
 
         Optional<OpenQuestion> openQuestion = openQuestionRepository.findByUuid(uuid);
-        if(openQuestion.isPresent())
+        if (openQuestion.isPresent())
             return openQuestion.get();
 
         Optional<TrueFalseQuestion> trueFalseQuestion = trueFalseQuestionRepository.findByUuid(uuid);
-        if(trueFalseQuestion.isPresent())
+        if (trueFalseQuestion.isPresent())
             return trueFalseQuestion.get();
 
         return testQuestionRepository.findByUuid(uuid)
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
 
-    public LinkedHashSet<Question> findAllByOwnerUuid(UUID ownerUuid){
+    public LinkedHashSet<Question> getByOwner(UUID ownerUuid) {
 
         LinkedHashSet<Question> questions = new LinkedHashSet<>();
 
@@ -86,45 +86,45 @@ public class QuestionService {
     }
 
     @Transactional
-    public OpenQuestion createOpenQuestion(OpenQuestionCreateDto dto, UUID ownerUuid, FileData imageData){
+    public OpenQuestion createOpenQuestion(OpenQuestionCreateDto dto, UUID ownerUuid, FileData imageData) {
         return saveOpenQuestion(new OpenQuestion(dto, ownerUuid, imageData));
     }
 
     @Transactional
-    public TrueFalseQuestion createTrueFalseQuestion(TrueFalseQuestionCreateDto dto, UUID ownerUuid, FileData imageData){
+    public TrueFalseQuestion createTrueFalseQuestion(TrueFalseQuestionCreateDto dto, UUID ownerUuid, FileData imageData) {
         return saveTrueFalseQuestion(new TrueFalseQuestion(dto, ownerUuid, imageData));
     }
 
     @Transactional
-    public TestQuestion createTestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, HashMap<String, FileData> imageUuidDataMap){
+    public TestQuestion createTestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, HashMap<String, FileData> answerImageUuidDataMap) {
 
-        Set<AnswerDto> answerDtoSet = dto.getNewAnswers().stream().map(TestAnswerDto::getAnswerDto).collect(Collectors.toCollection(LinkedHashSet::new));
+        HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
-        LinkedHashSet<Answer> answers = answerService.createAll(answerDtoSet, ownerUuid, imageUuidDataMap);
+        LinkedHashSet<Answer> answers = createAnswers(dto.getNewAnswers(), answerImageUuidDataMap, ownerUuid, answersCorrectness);
+        answersCorrectness.putAll(getAnswersCorrectness(dto));
         answers.addAll(answerService.getAllByUuids(dto.getAnswers().keySet()));
 
-        HashMap<UUID, Boolean> answersCorrectness = getAnswersCorrectness(dto, answers);
 
         return saveTestQuestion(new TestQuestion(dto.getQuestion(), ownerUuid, imageData, answers, answersCorrectness, dto.getIsMultipleChoice()));
     }
 
     @Transactional
-    public OpenQuestion saveOpenQuestion(@Valid OpenQuestion openQuestion){
+    public OpenQuestion saveOpenQuestion(@Valid OpenQuestion openQuestion) {
         return openQuestionRepository.save(openQuestion);
     }
 
     @Transactional
-    public TrueFalseQuestion saveTrueFalseQuestion(@Valid TrueFalseQuestion trueFalseQuestion){
+    public TrueFalseQuestion saveTrueFalseQuestion(@Valid TrueFalseQuestion trueFalseQuestion) {
         return trueFalseQuestionRepository.save(trueFalseQuestion);
     }
 
     @Transactional
-    public TestQuestion saveTestQuestion(@Valid TestQuestion testQuestion){
+    public TestQuestion saveTestQuestion(@Valid TestQuestion testQuestion) {
         return testQuestionRepository.save(testQuestion);
     }
 
     @Transactional
-    public OpenQuestion updateOpenQuestion(OpenQuestionUpdateDto dto, UUID uuid, FileData imageData){
+    public OpenQuestion updateOpenQuestion(OpenQuestionUpdateDto dto, UUID uuid, FileData imageData) {
         OpenQuestion question = getOpenQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
         question.setAnswer(dto.getAnswer() != null ? dto.getAnswer() : question.getAnswer());
@@ -132,7 +132,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public TrueFalseQuestion updateTrueFalseQuestion(TrueFalseQuestionUpdateDto dto, UUID uuid, FileData imageData){
+    public TrueFalseQuestion updateTrueFalseQuestion(TrueFalseQuestionUpdateDto dto, UUID uuid, FileData imageData) {
         TrueFalseQuestion question = getTrueFalseQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
         question.setAnswer(dto.getAnswer() != null ? dto.getAnswer() : question.getAnswer());
@@ -140,7 +140,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData){
+    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData) {
 
         TestQuestion question = getTestQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
@@ -153,14 +153,14 @@ public class QuestionService {
         return saveTestQuestion(question);
     }
 
-    private void updateQuestion(Question question, QuestionUpdateDto dto, FileData imageData){
+    private void updateQuestion(Question question, QuestionUpdateDto dto, FileData imageData) {
         question.setQuestion(dto.getQuestion() != null ? dto.getQuestion() : question.getQuestion());
         question.setImageData(imageData != null ? imageData : question.getImageData());
     }
 
-    public void removeImage(QuestionType questionType, UUID questionUuid){
+    public void removeImage(QuestionType questionType, UUID questionUuid) {
 
-        switch(questionType){
+        switch (questionType) {
             case OPEN:
                 OpenQuestion openQuestion = getOpenQuestionByUuid(questionUuid);
                 openQuestion.removeImage();
@@ -176,13 +176,21 @@ public class QuestionService {
                 saveTestQuestion(testQuestion);
                 break;
             default:
-                throwUnsupportedType(questionType);
+                throwUnsupportedType(questionType.toString());
         }
     }
 
-    public void delete(UUID uuid, QuestionType type){
+    public void delete(UUID uuid, String questionType) {
+        try {
+            delete(uuid, QuestionType.valueOf(questionType));
+        } catch (IllegalArgumentException e) {
+            throwUnsupportedType(questionType);
+        }
+    }
 
-        switch(type){
+    public void delete(UUID uuid, QuestionType type) {
+
+        switch (type) {
             case OPEN:
                 openQuestionRepository.delete(getOpenQuestionByUuid(uuid));
                 break;
@@ -193,31 +201,39 @@ public class QuestionService {
                 testQuestionRepository.delete(getTestQuestionByUuid(uuid));
                 break;
             default:
-                throwUnsupportedType(type);
+                throwUnsupportedType(type.toString());
         }
     }
 
-    private void throwUnsupportedType(QuestionType questionType){
-        throw new IllegalArgumentException(messageSource.getMessage("question_type.unsupported.type", new Object[]{questionType}, null));
+    private void throwUnsupportedType(String questionType) {
+        throw unsupportedTypeException(questionType);
     }
 
-    private NoSuchElementException noSuchElementExceptionByUuid(UUID uuid){
+    public IllegalArgumentException unsupportedTypeException(String questionType){
+        return new IllegalArgumentException(messageSource.getMessage("question_type.unsupported.type", new Object[]{questionType}, null));
+    }
+
+    private NoSuchElementException noSuchElementExceptionByUuid(UUID uuid) {
         return new NoSuchElementException(messageSource.getMessage("question.not_found.uuid", new Object[]{uuid}, null));
     }
 
-    private HashMap<UUID, Boolean> getAnswersCorrectness(TestQuestionCreateDto dto, LinkedHashSet<Answer> answers){
+    private HashMap<UUID, Boolean> getAnswersCorrectness(TestQuestionCreateDto dto) {
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
-
-
         dto.getAnswers().keySet().forEach(uuid -> answersCorrectness.put(UUID.fromString(uuid), dto.getAnswers().get(uuid)));
-        answers.forEach(answer -> {
-            answersCorrectness.put(answer.getUuid(), dto.getNewAnswersCorrectness().getFirst());
-            dto.getNewAnswersCorrectness().removeFirst();
-        });
-
-
         return answersCorrectness;
+    }
+
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, UUID ownerUuid, HashMap<UUID, Boolean> answersCorrectness){
+        return testAnswerDtoSet.stream().map(testAnswerDto -> {
+            Answer answer = answerService.create(
+                    testAnswerDto.getAnswerDto(),
+                    ownerUuid,
+                    imageUuidDataMap.get(testAnswerDto.getAnswerDto().getImageUuid())
+            );
+            answersCorrectness.put(answer.getUuid(), testAnswerDto.getIsCorrect());
+            return answer;
+        }).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 }

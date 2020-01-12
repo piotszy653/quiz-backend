@@ -2,6 +2,7 @@ package projects.quiz.model.question;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
 import projects.quiz.model.Answer;
@@ -22,11 +23,11 @@ import java.util.UUID;
 @Entity
 @Data
 @Validated
+@NoArgsConstructor
 public class TestQuestion extends Question {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @NotNull(message = "{answers.not_null}")
-    @Size(min = 2, message = "answers.min:2")
     private Set<Answer> answers;
 
     private HashMap<UUID, Boolean> answersCorrectness;

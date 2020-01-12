@@ -12,5 +12,8 @@ public class QuestionUpdateDto {
 
     @Size(max = 1000, message = "question.max_length:1000")
     private String question;
+
+    private String imageUuid;
+
 }
 

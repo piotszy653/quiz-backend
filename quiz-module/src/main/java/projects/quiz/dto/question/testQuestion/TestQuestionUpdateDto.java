@@ -23,8 +23,8 @@ public class TestQuestionUpdateDto extends QuestionUpdateDto {
 
     private Boolean isMultipleChoice;
 
-    public TestQuestionUpdateDto(String question, LinkedHashSet<String> answersUuids, LinkedHashSet<String> removedAnswersUuids, Boolean isMultipleChoice) {
-        super(question);
+    public TestQuestionUpdateDto(String question, String imageUuid, LinkedHashSet<String> answersUuids, LinkedHashSet<String> removedAnswersUuids, Boolean isMultipleChoice) {
+        super(question, imageUuid);
         this.answersUuids = answersUuids;
         this.removedAnswersUuids = removedAnswersUuids;
         this.isMultipleChoice = isMultipleChoice;
