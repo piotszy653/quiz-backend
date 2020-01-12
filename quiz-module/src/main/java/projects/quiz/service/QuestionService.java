@@ -180,6 +180,7 @@ public class QuestionService {
         }
     }
 
+    @Transactional
     public void delete(UUID uuid, String questionType) {
         try {
             delete(uuid, QuestionType.valueOf(questionType));
@@ -188,6 +189,7 @@ public class QuestionService {
         }
     }
 
+    @Transactional
     public void delete(UUID uuid, QuestionType type) {
 
         switch (type) {

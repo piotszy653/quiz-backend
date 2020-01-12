@@ -105,10 +105,10 @@ public class QuestionController {
     }
 
     @Secured("ROLE_QUESTION_DELETE")
-    @DeleteMapping(value = "/{uuid}/{questionType}")
+    @DeleteMapping(value = "/{questionType}/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@Valid @QuestionOwner @PathVariable String uuid, @PathVariable String questionType) {
-        questionService.delete(UUID.fromString(uuid), questionType);
+        questionService.delete(UUID.fromString(uuid), questionType.toUpperCase().replaceAll("-", "_"));
     }
 
 }
