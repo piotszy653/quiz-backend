@@ -23,7 +23,4 @@ public class TestQuestionUpdateDto extends QuestionUpdateDto {
 
     private Boolean isMultipleChoice;
 
-    public HashMap<String, Boolean> getAnswers() {
-        return addedAnswers;
-    }
 }

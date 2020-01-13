@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-1">
+        <createTable tableName="quiz">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="quizPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-2">
+        <createTable tableName="quiz_assessments">
+            <column name="quiz_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assessments_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assessments_key" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-3">
+        <createTable tableName="quiz_questions">
+            <column name="quiz_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="questions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-4">
+        <addPrimaryKey columnNames="quiz_id, assessments_key" tableName="quiz_assessments"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-5">
+        <addPrimaryKey columnNames="quiz_id, questions_id" tableName="quiz_questions"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-6">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="quiz" constraintName="FKa0v8ho7eyfbypvi3bhtelff8i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-7">
+        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="quiz_questions" constraintName="FKcgp9e1c6ww3t383aui4w8feae" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="quiz"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-8">
+        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="quiz_assessments" constraintName="FKddumarteyw02hbx5xsiu7dar8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="quiz"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-9">
+        <addForeignKeyConstraint baseColumnNames="assessments_id" baseTableName="quiz_assessments" constraintName="FKn7ulqm8m24iq0eg9cr4st0ybp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="assessment"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1578944518350-10">
+        <addForeignKeyConstraint baseColumnNames="questions_id" baseTableName="quiz_questions" constraintName="FKpmfvwer12y1nrjc0efm04dq16" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="question"/>
+    </changeSet>
+</databaseChangeLog>

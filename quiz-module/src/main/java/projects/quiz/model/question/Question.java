@@ -6,10 +6,7 @@ import projects.quiz.model.AbstractBaseEntity;
 import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,11 +16,12 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
 
 @EqualsAndHashCode(callSuper = true)
-@MappedSuperclass
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Question extends AbstractBaseEntity<Long> {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Question extends AbstractBaseEntity<Long> {
 
     @NotBlank(message = "{question.not_blank}")
     @Size(max = 1000, message = "question.max_length:1000")

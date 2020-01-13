@@ -10,7 +10,6 @@ import projects.quiz.dto.question.QuestionUpdateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionUpdateDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
-import projects.quiz.dto.question.testQuestion.TestQuestionDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionUpdateDto;
 import projects.quiz.dto.question.trueFalseQuestion.TrueFalseQuestionCreateDto;
 import projects.quiz.dto.question.trueFalseQuestion.TrueFalseQuestionUpdateDto;
@@ -159,6 +158,7 @@ public class QuestionService {
         question.setImageData(imageData != null ? imageData : question.getImageData());
     }
 
+    @Transactional
     public void removeImage(QuestionType questionType, UUID questionUuid) {
 
         switch (questionType) {
