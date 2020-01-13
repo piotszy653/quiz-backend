@@ -5,12 +5,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.quiz.dto.answer.AnswerDto;
 import projects.quiz.dto.answer.TestAnswerDto;
 import projects.quiz.dto.question.QuestionUpdateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionUpdateDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
+import projects.quiz.dto.question.testQuestion.TestQuestionDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionUpdateDto;
 import projects.quiz.dto.question.trueFalseQuestion.TrueFalseQuestionCreateDto;
 import projects.quiz.dto.question.trueFalseQuestion.TrueFalseQuestionUpdateDto;
@@ -101,7 +101,7 @@ public class QuestionService {
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
         LinkedHashSet<Answer> answers = createAnswers(dto.getNewAnswers(), answerImageUuidDataMap, ownerUuid, answersCorrectness);
-        answersCorrectness.putAll(getAnswersCorrectness(dto));
+        answersCorrectness.putAll(getAnswersCorrectness(dto.getAnswers()));
         answers.addAll(answerService.getAllByUuids(dto.getAnswers().keySet()));
 
 
@@ -145,9 +145,10 @@ public class QuestionService {
         TestQuestion question = getTestQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
 
-        LinkedHashSet<Answer> answersToRemove = answerService.getAllByUuids(dto.getRemovedAnswersUuids());
-        question.getAnswers().removeAll(answersToRemove);
-        question.getAnswers().addAll(answerService.getAllByUuids(dto.getAnswersUuids()));
+        removeAnswers(question, dto);
+        addAnswers(question, dto);
+        updateAnswersCorrectness(question, dto);
+
         question.setMultipleChoice(dto.getIsMultipleChoice() != null ? dto.getIsMultipleChoice() : question.isMultipleChoice());
 
         return saveTestQuestion(question);
@@ -211,7 +212,7 @@ public class QuestionService {
         throw unsupportedTypeException(questionType);
     }
 
-    public IllegalArgumentException unsupportedTypeException(String questionType){
+    public IllegalArgumentException unsupportedTypeException(String questionType) {
         return new IllegalArgumentException(messageSource.getMessage("question_type.unsupported.type", new Object[]{questionType}, null));
     }
 
@@ -219,14 +220,14 @@ public class QuestionService {
         return new NoSuchElementException(messageSource.getMessage("question.not_found.uuid", new Object[]{uuid}, null));
     }
 
-    private HashMap<UUID, Boolean> getAnswersCorrectness(TestQuestionCreateDto dto) {
+    private HashMap<UUID, Boolean> getAnswersCorrectness(HashMap<String, Boolean> answers){
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
-        dto.getAnswers().keySet().forEach(uuid -> answersCorrectness.put(UUID.fromString(uuid), dto.getAnswers().get(uuid)));
+        answers.keySet().forEach(uuid -> answersCorrectness.put(UUID.fromString(uuid), answers.get(uuid)));
         return answersCorrectness;
     }
 
-    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, UUID ownerUuid, HashMap<UUID, Boolean> answersCorrectness){
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, UUID ownerUuid, HashMap<UUID, Boolean> answersCorrectness) {
         return testAnswerDtoSet.stream().map(testAnswerDto -> {
             Answer answer = answerService.create(
                     testAnswerDto.getAnswerDto(),
@@ -238,4 +239,25 @@ public class QuestionService {
         }).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    private void removeAnswers(TestQuestion question, TestQuestionUpdateDto dto) {
+
+        LinkedHashSet<Answer> answersToRemove = answerService.getAllByUuids(dto.getRemovedAnswersUuids());
+        question.getAnswers().removeAll(answersToRemove);
+        answersToRemove.forEach(answer -> question.getAnswersCorrectness().remove(answer.getUuid()));
+    }
+
+    private void addAnswers(TestQuestion question, TestQuestionUpdateDto dto){
+        question.getAnswers().addAll(answerService.getAllByUuids(dto.getAddedAnswers().keySet()));
+        question.getAnswersCorrectness().putAll(getAnswersCorrectness(dto.getAddedAnswers()));
+    }
+
+    private void updateAnswersCorrectness(TestQuestion question, TestQuestionUpdateDto dto){
+        dto.getUpdatedAnswersCorrectness().keySet().forEach(uuidString ->
+                question.getAnswersCorrectness().replace(
+                        UUID.fromString(uuidString),
+                        dto.getUpdatedAnswersCorrectness().get(uuidString)
+                )
+        );
+
+    }
 }
