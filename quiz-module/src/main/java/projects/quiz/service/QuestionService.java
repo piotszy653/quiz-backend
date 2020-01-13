@@ -73,6 +73,10 @@ public class QuestionService {
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
 
+    public LinkedHashSet<Question> getAllByUuids(LinkedHashSet<String> uuids) {
+        return uuids.stream().map(uuid -> getByUuid(UUID.fromString(uuid))).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
     public LinkedHashSet<Question> getByOwner(UUID ownerUuid) {
 
         LinkedHashSet<Question> questions = new LinkedHashSet<>();

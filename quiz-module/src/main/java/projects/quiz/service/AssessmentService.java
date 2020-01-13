@@ -11,10 +11,7 @@ import projects.quiz.model.Assessment;
 import projects.quiz.repository.AssessmentRepository;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,6 +31,10 @@ public class AssessmentService {
     public Assessment getByUuid(UUID uuid) {
         return assessmentRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("assessment.not_found.uuid", new Object[]{uuid}, null)));
+    }
+
+    public Set<Assessment> getAllByUuids(Collection<UUID> uuids) {
+        return assessmentRepository.findAllByUuid(uuids);
     }
 
     public LinkedHashSet<Assessment> getByOwnerUuid(UUID ownerUuid) {
@@ -81,5 +82,4 @@ public class AssessmentService {
 
         return assessment;
     }
-
 }
