@@ -1,0 +1,62 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-1">
+        <createTable tableName="answer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="answerPK"/>
+            </column>
+            <column name="uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_data_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-2">
+        <createTable tableName="test_question">
+            <column name="answers_correctness" type="BYTEA"/>
+            <column name="is_multiple_choice" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-3">
+        <createTable tableName="test_question_answers">
+            <column name="test_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answers_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-4">
+        <addPrimaryKey columnNames="test_question_id, answers_id" tableName="test_question_answers"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-5">
+        <addPrimaryKey columnNames="id" constraintName="test_questionPK" tableName="test_question"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-6">
+        <addUniqueConstraint columnNames="answers_id" constraintName="UK_4s8xqdme4uvqevytuo56wxiol" tableName="test_question_answers"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-7">
+        <addForeignKeyConstraint baseColumnNames="test_question_id" baseTableName="test_question_answers" constraintName="FK1qsgwv2jdueikc7fj63t8mata" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="test_question"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-8">
+        <addForeignKeyConstraint baseColumnNames="image_data_id" baseTableName="answer" constraintName="FK9y2tv8kivatrovnl66rs72ncp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="file_data"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-9">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="test_question" constraintName="FKgb7lpsckv4yph0m2j02qb1185" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="question"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579107026635-10">
+        <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="test_question_answers" constraintName="FKoalbe28mxy7yhwmm5xgjcqv32" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="answer"/>
+    </changeSet>
+</databaseChangeLog>

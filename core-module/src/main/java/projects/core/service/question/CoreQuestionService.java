@@ -61,7 +61,7 @@ public class CoreQuestionService {
 
         Pair<UUID, FileData> ownerUuidAndImage = getOwnerUuidAndImage(dto.getImageUuid());
 
-        HashMap<String, FileData> imageUuidDataMap = getAnswersImageUuidDataMap(dto.getNewAnswers());
+        HashMap<String, FileData> imageUuidDataMap = getAnswersImageUuidDataMap(dto.getAnswers());
 
         return questionService.createTestQuestion(dto, ownerUuidAndImage.getLeft(), ownerUuidAndImage.getRight(), imageUuidDataMap);
     }
@@ -78,7 +78,12 @@ public class CoreQuestionService {
 
     @Transactional
     public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid) {
-        return questionService.updateTestQuestion(dto, uuid, fileDataService.getImageDataByUuid(dto.getImageUuid()));
+        return questionService.updateTestQuestion(
+                dto,
+                uuid,
+                fileDataService.getImageDataByUuid(dto.getImageUuid()),
+                getAnswersImageUuidDataMap(dto.getAnswers())
+        );
     }
 
     private Pair<UUID, FileData> getOwnerUuidAndImage(String imageUuid) {

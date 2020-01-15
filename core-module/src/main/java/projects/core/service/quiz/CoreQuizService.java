@@ -54,7 +54,7 @@ public class CoreQuizService {
                 .collect(Collectors.toCollection(LinkedList::new));
 
         LinkedList<HashMap<String, FileData>> testAnswersImageDataMaps = dto.getCreatedTestQuestions().stream()
-                .map(testQuestionDto ->  coreQuestionService.getAnswersImageUuidDataMap(testQuestionDto.getNewAnswers()))
+                .map(testQuestionDto ->  coreQuestionService.getAnswersImageUuidDataMap(testQuestionDto.getAnswers()))
                 .collect(Collectors.toCollection(LinkedList::new));
 
         return quizService.create(

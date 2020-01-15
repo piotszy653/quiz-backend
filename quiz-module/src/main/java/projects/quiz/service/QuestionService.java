@@ -103,10 +103,7 @@ public class QuestionService {
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
-        LinkedHashSet<Answer> answers = createAnswers(dto.getNewAnswers(), answerImageUuidDataMap, ownerUuid, answersCorrectness);
-        answersCorrectness.putAll(getAnswersCorrectness(dto.getAnswers()));
-        answers.addAll(answerService.getAllByUuids(dto.getAnswers().keySet()));
-
+        LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, ownerUuid, answersCorrectness);
 
         return saveTestQuestion(new TestQuestion(dto.getQuestion(), ownerUuid, imageData, answers, answersCorrectness, dto.getIsMultipleChoice()));
     }
@@ -143,13 +140,17 @@ public class QuestionService {
     }
 
     @Transactional
-    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData) {
+    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData, HashMap<String, FileData> answerImageUuidDataMap) {
 
         TestQuestion question = getTestQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
 
+        HashMap<UUID, Boolean> newAnswersCorrectness = new HashMap<>();
+        LinkedHashSet<Answer> newAnswers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, question.getOwnerUuid(), newAnswersCorrectness);
+        question.getAnswers().addAll(newAnswers);
+        question.getAnswersCorrectness().putAll(newAnswersCorrectness);
+
         removeAnswers(question, dto);
-        addAnswers(question, dto);
         updateAnswersCorrectness(question, dto);
 
         question.setMultipleChoice(dto.getIsMultipleChoice() != null ? dto.getIsMultipleChoice() : question.isMultipleChoice());
@@ -247,12 +248,8 @@ public class QuestionService {
 
         LinkedHashSet<Answer> answersToRemove = answerService.getAllByUuids(dto.getRemovedAnswersUuids());
         question.getAnswers().removeAll(answersToRemove);
+        answerService.deleteAll(answersToRemove);
         answersToRemove.forEach(answer -> question.getAnswersCorrectness().remove(answer.getUuid()));
-    }
-
-    private void addAnswers(TestQuestion question, TestQuestionUpdateDto dto){
-        question.getAnswers().addAll(answerService.getAllByUuids(dto.getAddedAnswers().keySet()));
-        question.getAnswersCorrectness().putAll(getAnswersCorrectness(dto.getAddedAnswers()));
     }
 
     private void updateAnswersCorrectness(TestQuestion question, TestQuestionUpdateDto dto){

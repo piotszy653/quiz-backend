@@ -13,8 +13,6 @@ public interface AnswerRepository extends CrudRepository<Answer, Long> {
 
     Optional<Answer> findByUuid(UUID uuid);
 
-    LinkedHashSet<Answer> findAllByUuid(Iterable<UUID> uuids);
-
     LinkedHashSet<Answer> findAllByOwnerUuid(UUID ownerUuid);
 
     void deleteByUuid(UUID uuid);

@@ -38,7 +38,7 @@ public class AnswerService {
         Set<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
         if(uuids.isEmpty())
             return new LinkedHashSet<>();
-        return answerRepository.findAllByUuid(uuids);
+        return uuids.stream().map(this::getByUuid).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public LinkedHashSet<Answer> getByOwnerUuid(UUID ownerUuid) {
