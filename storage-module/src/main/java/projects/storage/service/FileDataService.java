@@ -17,9 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,6 +66,14 @@ public class FileDataService {
         return fileDataRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("file.not_found.uuid", new Object[]{uuid}, null)));
 
+    }
+
+    public FileData getImageDataByUuid(String uuid) {
+        return uuid != null ? getByUuid(UUID.fromString(uuid)) : null;
+    }
+
+    public LinkedHashSet<FileData> getAllImagesByUuids(Collection<String> uuids){
+        return uuids.stream().map(this::getImageDataByUuid).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 

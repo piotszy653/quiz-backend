@@ -24,7 +24,11 @@ public enum RolesEnum {
             "ROLE_QUESTION_READ",
             "ROLE_QUESTION_CREATE",
             "ROLE_QUESTION_UPDATE",
-            "ROLE_QUESTION_DELETE"
+            "ROLE_QUESTION_DELETE",
+            "ROLE_QUIZ_READ",
+            "ROLE_QUIZ_CREATE",
+            "ROLE_QUIZ_UPDATE",
+            "ROLE_QUIZ_DELETE"
     )),
     USER(Arrays.asList(
             "ROLE_USER_READ",
@@ -40,7 +44,11 @@ public enum RolesEnum {
             "ROLE_QUESTION_READ",
             "ROLE_QUESTION_CREATE",
             "ROLE_QUESTION_UPDATE",
-            "ROLE_QUESTION_DELETE"
+            "ROLE_QUESTION_DELETE",
+            "ROLE_QUIZ_READ",
+            "ROLE_QUIZ_CREATE",
+            "ROLE_QUIZ_UPDATE",
+            "ROLE_QUIZ_DELETE"
     ));
 
     public final List<String> roleNames;

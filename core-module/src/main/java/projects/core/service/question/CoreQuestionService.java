@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import projects.quiz.dto.answer.TestAnswerDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionUpdateDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
@@ -59,7 +60,36 @@ public class CoreQuestionService {
     public TestQuestion createTestQuestion(TestQuestionCreateDto dto) {
 
         Pair<UUID, FileData> ownerUuidAndImage = getOwnerUuidAndImage(dto.getImageUuid());
-        Set<String> imageUuids = dto.getNewAnswers().stream()
+
+        HashMap<String, FileData> imageUuidDataMap = getAnswersImageUuidDataMap(dto.getNewAnswers());
+
+        return questionService.createTestQuestion(dto, ownerUuidAndImage.getLeft(), ownerUuidAndImage.getRight(), imageUuidDataMap);
+    }
+
+    @Transactional
+    public OpenQuestion updateOpenQuestion(OpenQuestionUpdateDto dto, UUID uuid) {
+        return questionService.updateOpenQuestion(dto, uuid, fileDataService.getImageDataByUuid(dto.getImageUuid()));
+    }
+
+    @Transactional
+    public TrueFalseQuestion updateTrueFalseQuestion(TrueFalseQuestionUpdateDto dto, UUID uuid) {
+        return questionService.updateTrueFalseQuestion(dto, uuid, fileDataService.getImageDataByUuid(dto.getImageUuid()));
+    }
+
+    @Transactional
+    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid) {
+        return questionService.updateTestQuestion(dto, uuid, fileDataService.getImageDataByUuid(dto.getImageUuid()));
+    }
+
+    private Pair<UUID, FileData> getOwnerUuidAndImage(String imageUuid) {
+        return Pair.of(
+                userService.getCurrentUserUuid(),
+                fileDataService.getImageDataByUuid(imageUuid)
+        );
+    }
+
+    public HashMap<String, FileData> getAnswersImageUuidDataMap(LinkedHashSet<TestAnswerDto> answers){
+        Set<String> imageUuids = answers.stream()
                 .map(testAnswerDto -> testAnswerDto.getAnswerDto().getImageUuid())
                 .collect(Collectors.toSet());
         imageUuids.remove(null);
@@ -68,33 +98,6 @@ public class CoreQuestionService {
         imageUuids.forEach(uuidString ->
                 imageUuidDataMap.put(uuidString, fileDataService.getByUuid(UUID.fromString(uuidString)))
         );
-
-        return questionService.createTestQuestion(dto, ownerUuidAndImage.getLeft(), ownerUuidAndImage.getRight(), imageUuidDataMap);
-    }
-
-    @Transactional
-    public OpenQuestion updateOpenQuestion(OpenQuestionUpdateDto dto, UUID uuid) {
-        return questionService.updateOpenQuestion(dto, uuid, getImageDataByUuid(dto.getImageUuid()));
-    }
-
-    @Transactional
-    public TrueFalseQuestion updateTrueFalseQuestion(TrueFalseQuestionUpdateDto dto, UUID uuid) {
-        return questionService.updateTrueFalseQuestion(dto, uuid, getImageDataByUuid(dto.getImageUuid()));
-    }
-
-    @Transactional
-    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid) {
-        return questionService.updateTestQuestion(dto, uuid, getImageDataByUuid(dto.getImageUuid()));
-    }
-
-    private Pair<UUID, FileData> getOwnerUuidAndImage(String imageUuid) {
-        return Pair.of(
-                userService.getCurrentUserUuid(),
-                getImageDataByUuid(imageUuid)
-        );
-    }
-
-    private FileData getImageDataByUuid(String uuid) {
-        return uuid != null ? fileDataService.getByUuid(UUID.fromString(uuid)) : null;
+        return imageUuidDataMap;
     }
 }

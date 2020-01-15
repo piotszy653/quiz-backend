@@ -1,4 +1,4 @@
-package projects.quiz.dto;
+package projects.quiz.dto.quiz;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,8 @@ import projects.quiz.utils.enums.QuestionType;
 import projects.quiz.utils.validator.assessment.AssessmentsExist;
 import projects.quiz.utils.validator.question.QuestionsExist;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +25,9 @@ public class QuizCreateDto {
     private LinkedHashSet<TestQuestionCreateDto> createdTestQuestions = new LinkedHashSet<>();
 
     @QuestionsExist
-    private LinkedHashSet<String> addedQuestionsUuuids = new LinkedHashSet<>();
+    private LinkedHashSet<String> addedQuestionsUuids = new LinkedHashSet<>();
 
-    @AssessmentsExist //todo check question type validation
-    private Map<QuestionType, String> assessmentsUuids;
+    @AssessmentsExist
+    private HashMap<QuestionType, String> assessmentsUuids = new HashMap<>();
+
 }

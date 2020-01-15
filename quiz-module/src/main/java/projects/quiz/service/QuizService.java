@@ -5,7 +5,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.quiz.dto.QuizCreateDto;
+import projects.quiz.dto.quiz.QuizCreateDto;
+import projects.quiz.dto.quiz.QuizUpdateDto;
 import projects.quiz.model.Assessment;
 import projects.quiz.model.Quiz;
 import projects.quiz.model.question.Question;
@@ -54,7 +55,7 @@ public class QuizService {
                 testAnswersImageUuidDataMap
         );
 
-        questions.addAll(questionService.getAllByUuids(quizCreateDto.getAddedQuestionsUuuids()));
+        questions.addAll(questionService.getAllByUuids(quizCreateDto.getAddedQuestionsUuids()));
 
         HashMap<QuestionType, Assessment> assessments = getAssessments(quizCreateDto.getAssessmentsUuids());
 
@@ -73,6 +74,40 @@ public class QuizService {
     }
 
     @Transactional
+    public Quiz update(QuizUpdateDto quizUpdateDto, UUID uuid, FileData imageData) {
+
+        Quiz quiz = getByUuid(uuid);
+
+        quiz.setImageData(imageData != null ? imageData : quiz.getImageData());
+
+        quiz.getQuestions().removeAll(questionService.getAllByUuids(quizUpdateDto.getRemovedQuestionsUuids()));
+        quiz.getQuestions().addAll(questionService.getAllByUuids(quizUpdateDto.getAddedQuestionsUuuids()));
+
+        quizUpdateDto.getReplacedAssessmentsUuids().keySet()
+                .forEach(questionType ->
+                        quiz.getAssessments()
+                                .replace(
+                                        questionType,
+                                        assessmentService.getByUuid(UUID.fromString(quizUpdateDto.getReplacedAssessmentsUuids().get(questionType))))
+                );
+
+        return save(quiz);
+    }
+
+    @Transactional
+    public void removeImage(UUID uuid) {
+
+        Quiz quiz = getByUuid(uuid);
+        quiz.removeImage(); // todo remove Image from db and storage
+        save(quiz);
+    }
+
+    @Transactional
+    public void delete(UUID uuid) {
+        quizRepository.deleteByUuid(uuid);
+    }
+
+    @Transactional
     public LinkedHashSet<Question> createQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid,
                                                    LinkedList<FileData> openQuestionsImages, LinkedList<FileData> trueFalseQuestionsImages,
                                                    LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<String, FileData>> testAnswersImages) {
@@ -84,7 +119,7 @@ public class QuizService {
     }
 
     @Transactional
-    public LinkedHashSet<Question> createAllOpenQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> openQuestionImages){
+    public LinkedHashSet<Question> createAllOpenQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> openQuestionImages) {
         return quizCreateDto.getCreatedOpenQuestions().stream()
                 .map(openQuestionCreateDto -> questionService.createOpenQuestion(
                         openQuestionCreateDto,
@@ -95,7 +130,7 @@ public class QuizService {
     }
 
     @Transactional
-    public LinkedHashSet<Question> createAllTrueFalseQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> trueFalseQuestionImages){
+    public LinkedHashSet<Question> createAllTrueFalseQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> trueFalseQuestionImages) {
         return quizCreateDto.getCreatedTrueFalseQuestions().stream()
                 .map(trueFalseQuestionCreateDto -> questionService.createTrueFalseQuestion(
                         trueFalseQuestionCreateDto,
@@ -106,7 +141,7 @@ public class QuizService {
     }
 
     @Transactional
-    public LinkedHashSet<Question> createAllTestQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> testQuestionImages, LinkedList<HashMap<String, FileData>> testAnswersImages){
+    public LinkedHashSet<Question> createAllTestQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> testQuestionImages, LinkedList<HashMap<String, FileData>> testAnswersImages) {
         return quizCreateDto.getCreatedTestQuestions().stream()
                 .map(testQuestionCreateDto -> questionService.createTestQuestion(
                         testQuestionCreateDto,
@@ -117,7 +152,7 @@ public class QuizService {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private HashMap<QuestionType, Assessment> getAssessments(Map<QuestionType, String> assessmentsUuids){
+    private HashMap<QuestionType, Assessment> getAssessments(Map<QuestionType, String> assessmentsUuids) {
 
         HashMap<QuestionType, Assessment> assessments = new HashMap<>();
 
