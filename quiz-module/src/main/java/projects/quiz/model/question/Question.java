@@ -1,6 +1,8 @@
 package projects.quiz.model.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.aspectj.weaver.ast.Test;
 import org.hibernate.annotations.Type;
 import projects.quiz.model.AbstractBaseEntity;
 import projects.quiz.utils.enums.QuestionType;
@@ -14,6 +16,8 @@ import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
+import static projects.quiz.utils.enums.QuestionType.TEST;
+import static projects.quiz.utils.enums.QuestionType.TRUE_FALSE;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -44,5 +48,15 @@ public class Question extends AbstractBaseEntity<Long> {
 
     public void removeImage(){
         imageData = null;
+    }
+
+    @JsonIgnore
+    public TrueFalseQuestion getIfTrueFalseQuestion(){
+        return type.equals(TRUE_FALSE) ? (TrueFalseQuestion) this : null;
+    }
+
+    @JsonIgnore
+    public TestQuestion getIfTestQuestion(){
+        return type.equals(TEST) ? (TestQuestion) this : null;
     }
 }

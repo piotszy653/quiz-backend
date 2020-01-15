@@ -63,7 +63,7 @@ public class QuestionController {
         return coreQuestionService.createTrueFalseQuestion(trueFalseQuestionCreateDto);
     }
 
-    @PreAuthorize("hasRole('QUESTION_CREATE') AND hasRole('ANSWER_CREATE')")
+    @Secured("ROLE_QUESTION_CREATE")
     @PostMapping("/test")
     @ResponseStatus(HttpStatus.CREATED)
     public TestQuestion createTestQuestion(@Valid @RequestBody TestQuestionCreateDto testQuestionCreateDto) {

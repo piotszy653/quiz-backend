@@ -46,8 +46,8 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer create(AnswerDto answerDto, UUID ownerUuid, FileData imageData){
-        return save(new Answer(answerDto, ownerUuid, imageData));
+    public Answer create(AnswerDto answerDto, FileData imageData){
+        return save(new Answer(answerDto, imageData));
     }
 
     @Transactional

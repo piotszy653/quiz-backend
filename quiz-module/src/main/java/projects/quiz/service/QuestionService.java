@@ -103,7 +103,7 @@ public class QuestionService {
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
-        LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, ownerUuid, answersCorrectness);
+        LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, answersCorrectness);
 
         return saveTestQuestion(new TestQuestion(dto.getQuestion(), ownerUuid, imageData, answers, answersCorrectness, dto.getIsMultipleChoice()));
     }
@@ -146,7 +146,7 @@ public class QuestionService {
         updateQuestion(question, dto, imageData);
 
         HashMap<UUID, Boolean> newAnswersCorrectness = new HashMap<>();
-        LinkedHashSet<Answer> newAnswers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, question.getOwnerUuid(), newAnswersCorrectness);
+        LinkedHashSet<Answer> newAnswers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, newAnswersCorrectness);
         question.getAnswers().addAll(newAnswers);
         question.getAnswersCorrectness().putAll(newAnswersCorrectness);
 
@@ -232,11 +232,10 @@ public class QuestionService {
         return answersCorrectness;
     }
 
-    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, UUID ownerUuid, HashMap<UUID, Boolean> answersCorrectness) {
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, HashMap<UUID, Boolean> answersCorrectness) {
         return testAnswerDtoSet.stream().map(testAnswerDto -> {
             Answer answer = answerService.create(
                     testAnswerDto.getAnswerDto(),
-                    ownerUuid,
                     imageUuidDataMap.get(testAnswerDto.getAnswerDto().getImageUuid())
             );
             answersCorrectness.put(answer.getUuid(), testAnswerDto.getIsCorrect());

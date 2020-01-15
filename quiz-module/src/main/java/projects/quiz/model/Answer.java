@@ -31,17 +31,11 @@ public class Answer extends AbstractBaseEntity<Long>{
     @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
-    @NotNull(message = "{owner_uuid.not_null}")
-    @Column(nullable = false)
-    @Type(type = "org.hibernate.type.PostgresUUIDType")
-    private UUID ownerUuid;
-
     @ManyToOne(fetch = EAGER)
     FileData imageData;
 
-    public Answer(AnswerDto dto, UUID ownerUuid, FileData imageData){
+    public Answer(AnswerDto dto, FileData imageData){
         this.answer = dto.getAnswer();
-        this.ownerUuid = ownerUuid;
         this.imageData = imageData;
     }
 }

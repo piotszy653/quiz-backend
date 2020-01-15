@@ -34,7 +34,6 @@ public class CoreAnswerService {
     public Answer create(AnswerDto dto) {
         return answerService.create(
                 dto,
-                userService.getCurrentUserUuid(),
                 imageDataFromDto(dto)
         );
     }
