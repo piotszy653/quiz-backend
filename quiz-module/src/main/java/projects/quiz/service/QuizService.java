@@ -81,15 +81,22 @@ public class QuizService {
         quiz.setImageData(imageData != null ? imageData : quiz.getImageData());
 
         quiz.getQuestions().removeAll(questionService.getAllByUuids(quizUpdateDto.getRemovedQuestionsUuids()));
-        quiz.getQuestions().addAll(questionService.getAllByUuids(quizUpdateDto.getAddedQuestionsUuuids()));
+        quiz.getQuestions().addAll(questionService.getAllByUuids(quizUpdateDto.getAddedQuestionsUuids()));
 
-        quizUpdateDto.getReplacedAssessmentsUuids().keySet()
-                .forEach(questionType ->
+        HashMap<QuestionType, String> assessmentsUuids = quizUpdateDto.getReplacedAssessmentsUuids();
+
+        assessmentsUuids.keySet()
+                .forEach(questionType -> {
+                    String assessmentUuid = assessmentsUuids.get(questionType);
+                    if (assessmentUuid == null)
+                        quiz.getAssessments().remove(questionType);
+                    else
                         quiz.getAssessments()
-                                .replace(
+                                .put(
                                         questionType,
-                                        assessmentService.getByUuid(UUID.fromString(quizUpdateDto.getReplacedAssessmentsUuids().get(questionType))))
-                );
+                                        assessmentService.getByUuid(UUID.fromString(assessmentUuid))
+                                );
+                });
 
         return save(quiz);
     }

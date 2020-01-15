@@ -20,7 +20,10 @@ public class AssessmentsExistValidator implements ConstraintValidator<Assessment
         if(uuids == null)
             return true;
 
-        uuids.values().forEach(uuid -> assessmentService.getByUuid(UUID.fromString(uuid)));
+        uuids.values().forEach(uuid -> {
+            if(uuid != null)
+                assessmentService.getByUuid(UUID.fromString(uuid));
+        });
 
         return true;
     }

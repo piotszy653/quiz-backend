@@ -20,8 +20,6 @@ import java.util.stream.Stream;
 
 import static javax.persistence.FetchType.EAGER;
 
-//todo Assessments question types validation
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
