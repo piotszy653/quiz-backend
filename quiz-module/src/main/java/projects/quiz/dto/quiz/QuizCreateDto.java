@@ -10,6 +10,7 @@ import projects.quiz.utils.enums.QuestionType;
 import projects.quiz.utils.validator.assessment.AssessmentsExist;
 import projects.quiz.utils.validator.question.QuestionsExist;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -20,9 +21,9 @@ public class QuizCreateDto {
 
     private String imageUuid;
 
-    private LinkedHashSet<OpenQuestionCreateDto> createdOpenQuestions = new LinkedHashSet<>();
-    private LinkedHashSet<TrueFalseQuestionCreateDto> createdTrueFalseQuestions = new LinkedHashSet<>();
-    private LinkedHashSet<TestQuestionCreateDto> createdTestQuestions = new LinkedHashSet<>();
+    private LinkedHashSet<@Valid OpenQuestionCreateDto> createdOpenQuestions = new LinkedHashSet<>();
+    private LinkedHashSet<@Valid TrueFalseQuestionCreateDto> createdTrueFalseQuestions = new LinkedHashSet<>();
+    private LinkedHashSet<@Valid TestQuestionCreateDto> createdTestQuestions = new LinkedHashSet<>();
 
     @QuestionsExist
     private LinkedHashSet<String> addedQuestionsUuids = new LinkedHashSet<>();
