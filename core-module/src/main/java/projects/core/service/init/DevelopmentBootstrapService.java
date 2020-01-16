@@ -16,6 +16,7 @@ import projects.user.repository.roles.RoleGroupRepository;
 import projects.user.repository.roles.RoleRepository;
 import projects.user.repository.user.UserRepository;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -67,10 +68,10 @@ public class DevelopmentBootstrapService extends BootstrapService {
                 assessmentRepository.save(new Assessment(
                         value.name,
                         user.get().getUuid(),
-                        value.correctRate,
-                        value.incorrectRate,
-                        value.minPoints,
-                        value.maxPoints
+                        value.correctRate != null ? new BigDecimal(value.correctRate) : null,
+                        value.incorrectRate != null ? new BigDecimal(value.incorrectRate) : null,
+                        value.minPoints != null ? new BigDecimal(value.minPoints) : null,
+                        value.maxPoints != null ? new BigDecimal(value.maxPoints) : null
                 ))
         );
     }

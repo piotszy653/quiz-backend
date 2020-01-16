@@ -9,9 +9,7 @@ import projects.quiz.model.Answer;
 import projects.quiz.service.AnswerService;
 import projects.storage.model.FileData;
 import projects.storage.service.FileDataService;
-import projects.user.service.UserService;
 
-import java.util.LinkedHashSet;
 import java.util.UUID;
 
 @Service
@@ -20,15 +18,9 @@ import java.util.UUID;
 @Validated
 public class CoreAnswerService {
 
-    private UserService userService;
-
     private AnswerService answerService;
 
     private FileDataService fileDataService;
-
-    public LinkedHashSet<Answer> getByOwner() {
-        return answerService.getByOwnerUuid(userService.getCurrentUserUuid());
-    }
 
     @Transactional
     public Answer create(AnswerDto dto) {
@@ -39,15 +31,15 @@ public class CoreAnswerService {
     }
 
     @Transactional
-    public Answer update(AnswerDto dto, UUID uuid){
+    public Answer update(AnswerDto dto, UUID uuid) {
         return answerService.update(
                 uuid,
                 dto,
                 imageDataFromDto(dto)
-                );
+        );
     }
 
-    private FileData imageDataFromDto(AnswerDto dto){
+    private FileData imageDataFromDto(AnswerDto dto) {
         return dto.getImageUuid() != null ? fileDataService.getByUuid(UUID.fromString(dto.getImageUuid())) : null;
     }
 }

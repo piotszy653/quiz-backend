@@ -6,14 +6,18 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.service.quiz.CoreQuizService;
+import projects.core.service.result.CoreResultService;
 import projects.core.utils.validator.quiz.QuizOwner;
 import projects.quiz.dto.quiz.QuizCreateDto;
 import projects.quiz.dto.quiz.QuizUpdateDto;
 import projects.quiz.model.Quiz;
+import projects.quiz.model.Result;
 import projects.quiz.service.QuizService;
+import projects.quiz.service.ResultService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +29,10 @@ public class QuizController {
     private final CoreQuizService coreQuizService;
 
     private final QuizService quizService;
+
+    private final ResultService resultService;
+
+    private final CoreResultService coreResultService;
 
     @Secured("ROLE_QUIZ_READ")
     @GetMapping("/{uuid}")
@@ -66,6 +74,19 @@ public class QuizController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@Valid @QuizOwner @PathVariable String uuid) {
         quizService.delete(UUID.fromString(uuid));
+    }
+
+    @GetMapping("/results/{uuid}")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<Result> getResults(@PathVariable String uuid) {
+        resultService.deleteByQuizUuid(uuid);
+        return resultService.getByQuizUuid(uuid);
+    }
+
+    @GetMapping("/results-by-user/{uuid}")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<Result> getResultsByUser(@PathVariable String uuid) {
+        return coreResultService.getByQuizAndUser(uuid);
     }
 
 }

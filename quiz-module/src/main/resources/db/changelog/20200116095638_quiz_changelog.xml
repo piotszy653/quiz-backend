@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="Piotr Szymański (generated)" id="1579124567225-1">
+    <changeSet author="Piotr Szymański (generated)" id="1579168609012-1">
         <createTable tableName="result">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="resultPK"/>
@@ -10,6 +10,7 @@
             <column name="uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
+            <column name="offset_date_time" type="TIMESTAMP WITH TIME ZONE"/>
             <column name="test_answers" type="BYTEA"/>
             <column name="true_false_answers" type="BYTEA"/>
             <column name="user_uuid" type="UUID">
@@ -18,7 +19,7 @@
             <column name="quiz_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1579124567225-2">
+    <changeSet author="Piotr Szymański (generated)" id="1579168609012-2">
         <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="result"
                                  constraintName="FK25wxfk8hlyt83jaa1no4anjsg" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="quiz"/>

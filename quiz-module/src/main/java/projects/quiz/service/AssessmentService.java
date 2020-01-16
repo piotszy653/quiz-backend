@@ -11,6 +11,7 @@ import projects.quiz.model.Assessment;
 import projects.quiz.repository.AssessmentRepository;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -75,10 +76,10 @@ public class AssessmentService {
         Assessment assessment = getByUuid(uuid);
 
         assessment.setName(dto.getName() != null ? dto.getName() : assessment.getName());
-        assessment.setCorrectRate(dto.getCorrectRate() != null ? dto.getCorrectRate() : assessment.getCorrectRate());
-        assessment.setIncorrectRate(dto.getIncorrectRate() != null ? dto.getIncorrectRate() : assessment.getIncorrectRate());
-        assessment.setMinPoints(dto.getMinPoints() != null ? dto.getMinPoints() : assessment.getMinPoints());
-        assessment.setMaxPoints(dto.getMaxPoints() != null ? dto.getMaxPoints() : assessment.getMaxPoints());
+        assessment.setCorrectRate(dto.getCorrectRate() != null ? new BigDecimal(dto.getCorrectRate()) : assessment.getCorrectRateBigDecimal());
+        assessment.setIncorrectRate(dto.getIncorrectRate() != null ? new BigDecimal(dto.getIncorrectRate()) : assessment.getIncorrectRateBigDecimal());
+        assessment.setMinPoints(dto.getMinPoints() != null ? new BigDecimal(dto.getMinPoints()) : assessment.getMinPointsBigDecimal());
+        assessment.setMaxPoints(dto.getMaxPoints() != null ? new BigDecimal(dto.getMaxPoints()) : assessment.getMaxPointsBigDecimal());
 
         return assessment;
     }

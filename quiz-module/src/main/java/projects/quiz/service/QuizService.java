@@ -31,6 +31,10 @@ public class QuizService {
 
     private final QuestionService questionService;
 
+    public Quiz getByUuid(String uuid){
+        return getByUuid(UUID.fromString(uuid));
+    }
+
     public Quiz getByUuid(UUID uuid) {
         return quizRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("quiz.not_found.uuid", new Object[]{uuid}, null)));

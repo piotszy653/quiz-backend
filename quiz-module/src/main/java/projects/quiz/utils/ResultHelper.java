@@ -5,6 +5,7 @@ import projects.quiz.model.Quiz;
 import projects.quiz.model.question.TestQuestion;
 import projects.quiz.model.question.TrueFalseQuestion;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -15,37 +16,41 @@ import static projects.quiz.utils.enums.QuestionType.TRUE_FALSE;
 
 public class ResultHelper {
 
-    private static void addPoints(Float points, Float questionPoints, Assessment assessment){
-        questionPoints = questionPoints > assessment.getMaxPoints() ? assessment.getMaxPoints() : questionPoints;
-        questionPoints = questionPoints < assessment.getMinPoints() ? assessment.getMinPoints() : questionPoints;
-        points += questionPoints;
+    private static void addPoints(BigDecimal points, Float questionPoints, Assessment assessment) {
+        if (assessment.getMaxPoints() != null)
+            questionPoints = questionPoints > assessment.getMaxPoints() ? assessment.getMaxPoints() : questionPoints;
+        if (assessment.getMinPoints() != null)
+            questionPoints = questionPoints < assessment.getMinPoints() ? assessment.getMinPoints() : questionPoints;
+        points = points.add(new BigDecimal(questionPoints));
     }
 
-    public static Float calcTrueFalsePoints(Quiz quiz, Set<TrueFalseQuestion> trueFalseQuestions, Map<UUID, Boolean> trueFalseAnswers){
-        Float points = 0.0f;
+    public static Float calcTrueFalsePoints(Quiz quiz, Set<TrueFalseQuestion> trueFalseQuestions, Map<UUID, Boolean> trueFalseAnswers) {
+        BigDecimal points = new BigDecimal(0.0);
         Assessment tfAssessment = quiz.getAssessments().get(TRUE_FALSE);
         trueFalseQuestions.forEach(question -> {
             Float tfPoints = 0.0f;
-            tfPoints += trueFalseAnswers.get(question.getUuid()).equals(question.getAnswer()) ? tfAssessment.getCorrectRate() : tfAssessment.getIncorrectRate();
+            tfPoints += Boolean.valueOf(question.getAnswer()).equals(trueFalseAnswers.get(question.getUuid())) ? tfAssessment.getCorrectRate() : tfAssessment.getIncorrectRate();
             addPoints(points, tfPoints, tfAssessment);
         });
-        return points;
+        return points.floatValue();
     }
 
     public static Float calcTestPoints(Quiz quiz, Set<TestQuestion> testQuestions, Map<UUID, Set<UUID>> testAnswers) {
-        Float points = 0.0f;
+        BigDecimal points = new BigDecimal(0.0);
         Assessment testAssessment = quiz.getAssessments().get(TEST);
         testQuestions.forEach(question -> {
             Set<UUID> pickedAnswers = testAnswers.get(question.getUuid());
-            Set<Float> answersPoints = pickedAnswers.stream().map(answerUuid ->
-                    question.getAnswersCorrectness().get(answerUuid) ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate()
-            ).collect(Collectors.toSet());
-            Float testPoints = 0.0f;
-            for(Float answerPoints: answersPoints){
-                testPoints += answerPoints;
+            if (pickedAnswers != null) {
+                Set<Float> answersPoints = pickedAnswers.stream().map(answerUuid ->
+                        question.getAnswersCorrectness().get(answerUuid) ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate()
+                ).collect(Collectors.toSet());
+                Float testPoints = 0.0f;
+                for (Float answerPoints : answersPoints) {
+                    testPoints += answerPoints;
+                }
+                addPoints(points, testPoints, testAssessment);
             }
-            addPoints(points, testPoints, testAssessment);
         });
-        return points;
+        return points.floatValue();
     }
 }

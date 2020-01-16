@@ -1,5 +1,6 @@
 package projects.quiz.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,51 +29,71 @@ public class Assessment extends AbstractBaseEntity<Long> implements AssessmentDt
 
     @Column(nullable = false)
     @NotNull(message = "{uuid.not_null}")
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID ownerUuid;
 
     @Column(nullable = false)
     @NotNull(message = "{correct_rate.not_null}")
-    @Min(value = 0 ,message = "correct_rate.min:0")
-    private float correctRate;
+    @Min(value = 0, message = "correct_rate.min:0")
+    private BigDecimal correctRate;
 
     @Column(nullable = false)
     @NotNull(message = "{incorrect_rate.not_null}")
-    private float incorrectRate;
+    private BigDecimal incorrectRate;
 
-    private Float minPoints;
+    private BigDecimal minPoints;
 
-    @Min(value = 0 ,message = "max_points.min:0")
-    private Float maxPoints;
+    @Min(value = 0, message = "max_points.min:0")
+    private BigDecimal maxPoints;
 
-    public Assessment(AssessmentCreateDto dto, UUID ownerUuid){
+    public Assessment(AssessmentCreateDto dto, UUID ownerUuid) {
 
         this.ownerUuid = ownerUuid;
         this.name = dto.getName();
-        this.correctRate = dto.getCorrectRate();
-        this.incorrectRate = dto.getIncorrectRate();
-        this.minPoints = dto.getMinPoints();
-        this.maxPoints = dto.getMaxPoints();
+        this.correctRate = new BigDecimal(dto.getCorrectRate());
+        this.incorrectRate = new BigDecimal(dto.getIncorrectRate());
+        this.minPoints = new BigDecimal(dto.getMinPoints());
+        this.maxPoints = new BigDecimal(dto.getMaxPoints());
 
     }
 
     @Override
     public Float getCorrectRate() {
-        return correctRate;
+        return correctRate.floatValue();
     }
 
     @Override
     public Float getIncorrectRate() {
-        return incorrectRate;
+        return incorrectRate.floatValue();
     }
 
     @Override
     public Float getMinPoints() {
-        return minPoints;
+        return minPoints != null ? minPoints.floatValue() : null;
     }
 
     @Override
     public Float getMaxPoints() {
+        return maxPoints != null ? maxPoints.floatValue() : null;
+    }
+
+    @JsonIgnore
+    public BigDecimal getCorrectRateBigDecimal() {
+        return correctRate;
+    }
+
+    @JsonIgnore
+    public BigDecimal getIncorrectRateBigDecimal() {
+        return incorrectRate;
+    }
+
+    @JsonIgnore
+    public BigDecimal getMinPointsBigDecimal() {
+        return minPoints;
+    }
+
+    @JsonIgnore
+    public BigDecimal getMaxPointsBigDecimal() {
         return maxPoints;
     }
 }

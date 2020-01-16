@@ -24,29 +24,25 @@ public class AnswerService {
 
     private final MessageSource messageSource;
 
-    public Answer getById(Long id){
+    public Answer getById(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("answer.not_found.id", new Object[]{id}, null)));
     }
 
-    public Answer getByUuid(UUID uuid){
+    public Answer getByUuid(UUID uuid) {
         return answerRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(notFoundByUuidMessage(uuid)));
     }
 
-    public LinkedHashSet<Answer> getAllByUuids(Collection<String> uuidStringSet){
+    public LinkedHashSet<Answer> getAllByUuids(Collection<String> uuidStringSet) {
         Set<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
-        if(uuids.isEmpty())
+        if (uuids.isEmpty())
             return new LinkedHashSet<>();
         return uuids.stream().map(this::getByUuid).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public LinkedHashSet<Answer> getByOwnerUuid(UUID ownerUuid) {
-        return answerRepository.findAllByOwnerUuid(ownerUuid);
-    }
-
     @Transactional
-    public Answer create(AnswerDto answerDto, FileData imageData){
+    public Answer create(AnswerDto answerDto, FileData imageData) {
         return save(new Answer(answerDto, imageData));
     }
 
@@ -56,7 +52,7 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer update(UUID answerUuid, AnswerDto dto, FileData imageData){
+    public Answer update(UUID answerUuid, AnswerDto dto, FileData imageData) {
 
         return answerRepository.findByUuid(answerUuid)
                 .map(answer -> {
@@ -77,15 +73,9 @@ public class AnswerService {
         answerRepository.deleteAll(answers);
     }
 
-    @Transactional
-    public void deleteAllByOwnerUuid(UUID ownerUuid) {
-        answerRepository.deleteAllByOwnerUuid(ownerUuid);
-    }
-
-    private String notFoundByUuidMessage(UUID uuid){
+    private String notFoundByUuidMessage(UUID uuid) {
         return messageSource.getMessage("answer.not_found.uuid", new Object[]{uuid}, null);
     }
-
 
 
 }
