@@ -34,6 +34,11 @@ public class Rate extends AbstractBaseEntity<Long> {
     @Type(type = "org.hibernate.type.PostgresUUIDType")
     UUID ratedObjectUuid;
 
+    @NotNull(message = "user_uuid.not_null")
+    @Column(nullable = false)
+    @Type(type = "org.hibernate.type.PostgresUUIDType")
+    UUID userUuid;
+
     @NotNull(message = "{type.not_null}")
     @Column(nullable = false)
     @Enumerated(value = STRING)
