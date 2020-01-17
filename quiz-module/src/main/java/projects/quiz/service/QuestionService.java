@@ -73,8 +73,8 @@ public class QuestionService {
                 .orElseThrow(() -> noSuchElementExceptionByUuid(uuid));
     }
 
-    public LinkedHashSet<Question> getAllByUuids(LinkedHashSet<String> uuids) {
-        return uuids.stream().map(uuid -> getByUuid(UUID.fromString(uuid))).collect(Collectors.toCollection(LinkedHashSet::new));
+    public LinkedHashSet<Question> getAllByUuids(LinkedHashSet<UUID> uuids) {
+        return uuids.stream().map(this::getByUuid).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public LinkedHashSet<Question> getByOwner(UUID ownerUuid) {
@@ -99,7 +99,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public TestQuestion createTestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, HashMap<String, FileData> answerImageUuidDataMap) {
+    public TestQuestion createTestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, HashMap<UUID, FileData> answerImageUuidDataMap) {
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
@@ -140,7 +140,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData, HashMap<String, FileData> answerImageUuidDataMap) {
+    public TestQuestion updateTestQuestion(TestQuestionUpdateDto dto, UUID uuid, FileData imageData, HashMap<UUID, FileData> answerImageUuidDataMap) {
 
         TestQuestion question = getTestQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
@@ -232,7 +232,7 @@ public class QuestionService {
         return answersCorrectness;
     }
 
-    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<String, FileData> imageUuidDataMap, HashMap<UUID, Boolean> answersCorrectness) {
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<UUID, FileData> imageUuidDataMap, HashMap<UUID, Boolean> answersCorrectness) {
         return testAnswerDtoSet.stream().map(testAnswerDto -> {
             Answer answer = answerService.create(
                     testAnswerDto.getAnswerDto(),
@@ -252,10 +252,10 @@ public class QuestionService {
     }
 
     private void updateAnswersCorrectness(TestQuestion question, TestQuestionUpdateDto dto){
-        dto.getUpdatedAnswersCorrectness().keySet().forEach(uuidString ->
+        dto.getUpdatedAnswersCorrectness().keySet().forEach(uuid ->
                 question.getAnswersCorrectness().replace(
-                        UUID.fromString(uuidString),
-                        dto.getUpdatedAnswersCorrectness().get(uuidString)
+                        uuid,
+                        dto.getUpdatedAnswersCorrectness().get(uuid)
                 )
         );
 

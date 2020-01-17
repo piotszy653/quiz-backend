@@ -9,6 +9,7 @@ import projects.quiz.utils.validator.answer.AnswersExist;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,9 +18,9 @@ public class TestQuestionUpdateDto extends QuestionUpdateDto {
 
     private LinkedHashSet<TestAnswerDto> answers = new LinkedHashSet<>();
 
-    private LinkedHashSet<String> removedAnswersUuids = new LinkedHashSet<>();
+    private LinkedHashSet<UUID> removedAnswersUuids = new LinkedHashSet<>();
 
-    private HashMap<String, Boolean> updatedAnswersCorrectness = new HashMap<>();
+    private HashMap<UUID, Boolean> updatedAnswersCorrectness = new HashMap<>();
 
     private Boolean isMultipleChoice;
 

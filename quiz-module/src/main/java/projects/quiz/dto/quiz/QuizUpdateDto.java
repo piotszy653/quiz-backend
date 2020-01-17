@@ -9,19 +9,20 @@ import projects.quiz.utils.validator.question.QuestionsExist;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizUpdateDto {
 
-    private String imageUuid;
+    private UUID imageUuid;
 
     @QuestionsExist
-    private LinkedHashSet<String> addedQuestionsUuids = new LinkedHashSet<>();
+    private LinkedHashSet<UUID> addedQuestionsUuids = new LinkedHashSet<>();
 
-    private LinkedHashSet<String> removedQuestionsUuids = new LinkedHashSet<>();
+    private LinkedHashSet<UUID> removedQuestionsUuids = new LinkedHashSet<>();
 
     @AssessmentsExist
-    private HashMap<QuestionType, String> replacedAssessmentsUuids = new HashMap<>();
+    private HashMap<QuestionType, UUID> replacedAssessmentsUuids = new HashMap<>();
 }

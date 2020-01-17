@@ -34,8 +34,7 @@ public class AnswerService {
                 .orElseThrow(() -> new NoSuchElementException(notFoundByUuidMessage(uuid)));
     }
 
-    public LinkedHashSet<Answer> getAllByUuids(Collection<String> uuidStringSet) {
-        Set<UUID> uuids = uuidStringSet.stream().map(UUID::fromString).collect(Collectors.toSet());
+    public LinkedHashSet<Answer> getAllByUuids(Collection<UUID> uuids) {
         if (uuids.isEmpty())
             return new LinkedHashSet<>();
         return uuids.stream().map(this::getByUuid).collect(Collectors.toCollection(LinkedHashSet::new));

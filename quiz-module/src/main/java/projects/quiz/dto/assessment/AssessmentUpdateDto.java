@@ -3,11 +3,8 @@ package projects.quiz.dto.assessment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import projects.quiz.utils.validator.assessment.AssessmentCreate;
-import projects.quiz.utils.validator.assessment.AssessmentUpdate;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data

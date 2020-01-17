@@ -26,25 +26,13 @@ public class ResultService {
 
     private final QuizService quizService;
 
-    public Result getByUuid(String uuid) {
-        return getByUuid(UUID.fromString(uuid));
-    }
-
     public Result getByUuid(UUID uuid) {
         return resultRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("result.not_found.uuid", new Object[]{uuid}, null)));
     }
 
-    public LinkedHashSet<Result> getByUserUuid(String userUuid) {
-        return getByUserUuid(UUID.fromString(userUuid));
-    }
-
     public LinkedHashSet<Result> getByUserUuid(UUID userUuid) {
         return resultRepository.findAllByUserUuid(userUuid);
-    }
-
-    public LinkedHashSet<Result> getByQuizUuid(String quizUuid) {
-        return getByQuizUuid(UUID.fromString(quizUuid));
     }
 
     public LinkedHashSet<Result> getByQuizUuid(UUID quizUuid) {
@@ -75,7 +63,7 @@ public class ResultService {
     }
 
     @Transactional
-    public void deleteByQuizUuid(String uuid) {
+    public void deleteByQuizUuid(UUID uuid) {
         resultRepository.deleteAll(getByQuizUuid(uuid));
     }
 }

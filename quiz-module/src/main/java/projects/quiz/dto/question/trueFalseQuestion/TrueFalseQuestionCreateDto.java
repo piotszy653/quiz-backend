@@ -17,8 +17,4 @@ public class TrueFalseQuestionCreateDto extends QuestionCreateDto {
     @NotNull(message = "{answer.not_null}")
     private Boolean answer;
 
-    public TrueFalseQuestionCreateDto(String question, String imageUuid, boolean answer){
-        super(question, imageUuid);
-        this.answer = answer;
-    }
 }

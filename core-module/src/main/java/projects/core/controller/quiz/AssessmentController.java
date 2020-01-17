@@ -29,8 +29,8 @@ public class AssessmentController {
     @Secured("ROLE_ASSESSMENT_READ")
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Assessment getByUuid(@Valid @AssessmentOwner @PathVariable String uuid) {
-        return assessmentService.getByUuid(UUID.fromString(uuid));
+    public Assessment getByUuid(@Valid @AssessmentOwner @PathVariable UUID uuid) {
+        return assessmentService.getByUuid(uuid);
     }
 
     @Secured("ROLE_ASSESSMENT_READ")
@@ -50,15 +50,15 @@ public class AssessmentController {
     @Secured("ROLE_ASSESSMENT_UPDATE")
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Assessment update(@Valid @RequestBody AssessmentUpdateDto assessmentUpdateDto, @Valid @AssessmentOwner @PathVariable String uuid) {
-        return assessmentService.update(assessmentUpdateDto, UUID.fromString(uuid));
+    public Assessment update(@Valid @RequestBody AssessmentUpdateDto assessmentUpdateDto, @Valid @AssessmentOwner @PathVariable UUID uuid) {
+        return assessmentService.update(assessmentUpdateDto, uuid);
     }
 
     @Secured("ROLE_ASSESSMENT_DELETE")
     @DeleteMapping(value = "/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Valid @AssessmentOwner @PathVariable String uuid) {
-        assessmentService.delete(UUID.fromString(uuid));
+    public void delete(@Valid @AssessmentOwner @PathVariable UUID uuid) {
+        assessmentService.delete(uuid);
     }
 
 }

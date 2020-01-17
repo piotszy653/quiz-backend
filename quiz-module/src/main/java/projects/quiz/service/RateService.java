@@ -31,20 +31,8 @@ public class RateService {
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("rate.not_found.uuid", new Object[]{uuid}, null)));
     }
 
-    public Rate getByUuid(String uuid) {
-        return getByUuid(UUID.fromString(uuid));
-    }
-
-    public LinkedHashSet<Rate> getAllByUserUuid(String userUuid) {
-        return getAllByUserUuid(UUID.fromString(userUuid));
-    }
-
     public LinkedHashSet<Rate> getAllByUserUuid(UUID userUuid) {
         return rateRepository.findAllByUserUuid(userUuid);
-    }
-
-    public LinkedHashSet<Rate> getAllByObjectUuid(String ratedObjectUuid) {
-        return getAllByObjectUuid(UUID.fromString(ratedObjectUuid));
     }
 
     public LinkedHashSet<Rate> getAllByObjectUuid(UUID objectUuid) {

@@ -51,14 +51,14 @@ public class Result extends AbstractBaseEntity<Long> {
         this.userUuid = userUuid;
         this.quiz = quiz;
 
-        HashMap<String, Boolean> tfAnswers = dto.getTrueFalseAnswers();
-        tfAnswers.keySet().forEach(questionUuid -> trueFalseAnswers.put(UUID.fromString(questionUuid), tfAnswers.get(questionUuid)));
+        HashMap<UUID, Boolean> tfAnswers = dto.getTrueFalseAnswers();
+        tfAnswers.keySet().forEach(questionUuid -> trueFalseAnswers.put(questionUuid, tfAnswers.get(questionUuid)));
 
-        HashMap<String, Set<String>> testAnswers = dto.getTestAnswers();
+        HashMap<UUID, Set<UUID>> testAnswers = dto.getTestAnswers();
         testAnswers.keySet().forEach(questionUuid ->
                 this.testAnswers.put(
-                        UUID.fromString(questionUuid),
-                        testAnswers.get(questionUuid).stream().map(UUID::fromString).collect(Collectors.toSet())
+                        questionUuid,
+                        testAnswers.get(questionUuid)
                 )
         );
     }

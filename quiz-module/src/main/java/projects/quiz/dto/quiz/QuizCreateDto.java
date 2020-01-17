@@ -13,22 +13,23 @@ import projects.quiz.utils.validator.question.QuestionsExist;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizCreateDto {
 
-    private String imageUuid;
+    private UUID imageUuid;
 
     private LinkedHashSet<@Valid OpenQuestionCreateDto> createdOpenQuestions = new LinkedHashSet<>();
     private LinkedHashSet<@Valid TrueFalseQuestionCreateDto> createdTrueFalseQuestions = new LinkedHashSet<>();
     private LinkedHashSet<@Valid TestQuestionCreateDto> createdTestQuestions = new LinkedHashSet<>();
 
     @QuestionsExist
-    private LinkedHashSet<String> addedQuestionsUuids = new LinkedHashSet<>();
+    private LinkedHashSet<UUID> addedQuestionsUuids = new LinkedHashSet<>();
 
     @AssessmentsExist
-    private HashMap<QuestionType, String> assessmentsUuids = new HashMap<>();
+    private HashMap<QuestionType, UUID> assessmentsUuids = new HashMap<>();
 
 }

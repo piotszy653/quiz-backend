@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +17,5 @@ public class QuestionCreateDto {
     @Size(max = 1000, message = "question.max_length:1000")
     private String question;
 
-    private String imageUuid;
+    private UUID imageUuid;
 }

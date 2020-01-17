@@ -25,8 +25,8 @@ public class ResultController {
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Result getByUuid(@PathVariable String uuid) {
-        return resultService.getByUuid(UUID.fromString(uuid));
+    public Result getByUuid(@PathVariable UUID uuid) {
+        return resultService.getByUuid(uuid);
     }
 
     @GetMapping

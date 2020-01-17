@@ -22,8 +22,8 @@ public class CoreResultService{
 
     private final UserService userService;
 
-    public Set<Result> getByQuizAndUser(String quizUuid){
-        return resultService.getUsersResultsInQuiz(userService.getCurrentUserUuid(), UUID.fromString(quizUuid));
+    public Set<Result> getByQuizAndUser(UUID quizUuid){
+        return resultService.getUsersResultsInQuiz(userService.getCurrentUserUuid(), quizUuid);
     }
 
     public Set<Result> getByUser(){

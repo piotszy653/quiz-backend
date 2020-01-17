@@ -40,6 +40,6 @@ public class CoreAnswerService {
     }
 
     private FileData imageDataFromDto(AnswerDto dto) {
-        return dto.getImageUuid() != null ? fileDataService.getByUuid(UUID.fromString(dto.getImageUuid())) : null;
+        return dto.getImageUuid() != null ? fileDataService.getByUuid(dto.getImageUuid()) : null;
     }
 }

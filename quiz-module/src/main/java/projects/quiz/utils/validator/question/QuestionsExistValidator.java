@@ -9,17 +9,17 @@ import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class QuestionsExistValidator implements ConstraintValidator<QuestionsExist, Set<String>> {
+public class QuestionsExistValidator implements ConstraintValidator<QuestionsExist, Set<UUID>> {
 
     private QuestionService questionService;
 
     @Override
-    public boolean isValid(Set<String> uuids, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Set<UUID> uuids, ConstraintValidatorContext constraintValidatorContext) {
 
-        if(uuids == null)
+        if (uuids == null)
             return true;
 
-        uuids.forEach(uuid -> questionService.getByUuid(UUID.fromString(uuid)));
+        uuids.forEach(uuid -> questionService.getByUuid(uuid));
 
         return true;
     }

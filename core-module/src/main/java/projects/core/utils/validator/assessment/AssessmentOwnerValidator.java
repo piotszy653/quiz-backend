@@ -10,16 +10,16 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class AssessmentOwnerValidator implements ConstraintValidator<AssessmentOwner, String> {
+public class AssessmentOwnerValidator implements ConstraintValidator<AssessmentOwner, UUID> {
 
     private UserService userService;
 
     private AssessmentService assessmentService;
 
     @Override
-    public boolean isValid(String uuid, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(UUID uuid, ConstraintValidatorContext constraintValidatorContext) {
 
-        Assessment assessment = assessmentService.getByUuid(UUID.fromString(uuid));
+        Assessment assessment = assessmentService.getByUuid(uuid);
         return assessment.getOwnerUuid().equals(userService.getCurrentUserUuid());
     }
 }

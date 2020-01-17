@@ -68,11 +68,11 @@ public class FileDataService {
 
     }
 
-    public FileData getImageDataByUuid(String uuid) {
-        return uuid != null ? getByUuid(UUID.fromString(uuid)) : null;
+    public FileData getImageDataByUuid(UUID uuid) {
+        return uuid != null ? getByUuid(uuid) : null;
     }
 
-    public LinkedHashSet<FileData> getAllImagesByUuids(Collection<String> uuids){
+    public LinkedHashSet<FileData> getAllImagesByUuids(Collection<UUID> uuids){
         return uuids.stream().map(this::getImageDataByUuid).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

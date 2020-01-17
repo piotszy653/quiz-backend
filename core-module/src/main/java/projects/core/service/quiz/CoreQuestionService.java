@@ -61,7 +61,7 @@ public class CoreQuestionService {
 
         Pair<UUID, FileData> ownerUuidAndImage = getOwnerUuidAndImage(dto.getImageUuid());
 
-        HashMap<String, FileData> imageUuidDataMap = getAnswersImageUuidDataMap(dto.getAnswers());
+        HashMap<UUID, FileData> imageUuidDataMap = getAnswersImageUuidDataMap(dto.getAnswers());
 
         return questionService.createTestQuestion(dto, ownerUuidAndImage.getLeft(), ownerUuidAndImage.getRight(), imageUuidDataMap);
     }
@@ -86,22 +86,22 @@ public class CoreQuestionService {
         );
     }
 
-    private Pair<UUID, FileData> getOwnerUuidAndImage(String imageUuid) {
+    private Pair<UUID, FileData> getOwnerUuidAndImage(UUID imageUuid) {
         return Pair.of(
                 userService.getCurrentUserUuid(),
                 fileDataService.getImageDataByUuid(imageUuid)
         );
     }
 
-    public HashMap<String, FileData> getAnswersImageUuidDataMap(LinkedHashSet<TestAnswerDto> answers){
-        Set<String> imageUuids = answers.stream()
+    public HashMap<UUID, FileData> getAnswersImageUuidDataMap(LinkedHashSet<TestAnswerDto> answers){
+        Set<UUID> imageUuids = answers.stream()
                 .map(testAnswerDto -> testAnswerDto.getAnswerDto().getImageUuid())
                 .collect(Collectors.toSet());
         imageUuids.remove(null);
-        HashMap<String, FileData> imageUuidDataMap = new HashMap<>();
+        HashMap<UUID, FileData> imageUuidDataMap = new HashMap<>();
 
-        imageUuids.forEach(uuidString ->
-                imageUuidDataMap.put(uuidString, fileDataService.getByUuid(UUID.fromString(uuidString)))
+        imageUuids.forEach(uuid ->
+                imageUuidDataMap.put(uuid, fileDataService.getByUuid(uuid))
         );
         return imageUuidDataMap;
     }

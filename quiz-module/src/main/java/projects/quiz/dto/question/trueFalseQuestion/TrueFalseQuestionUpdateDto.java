@@ -16,8 +16,4 @@ public class TrueFalseQuestionUpdateDto extends QuestionUpdateDto {
 
     private Boolean answer;
 
-    public TrueFalseQuestionUpdateDto(String question, String imageUuid, boolean answer){
-        super(question, imageUuid);
-        this.answer = answer;
-    }
 }

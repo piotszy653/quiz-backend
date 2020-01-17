@@ -35,13 +35,11 @@ public class QuizController {
 
     private final CoreResultService coreResultService;
 
-    private final CoreRateService coreRateService;
-
     @Secured("ROLE_QUIZ_READ")
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Quiz getByUuid(@Valid @QuizOwner @PathVariable String uuid) {
-        return quizService.getByUuid(UUID.fromString(uuid));
+    public Quiz getByUuid(@Valid @QuizOwner @PathVariable UUID uuid) {
+        return quizService.getByUuid(uuid);
     }
 
     @Secured("ROLE_QUIZ_READ")
@@ -61,34 +59,34 @@ public class QuizController {
     @Secured("ROLE_QUIZ_UPDATE")
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Quiz update(@Valid @RequestBody QuizUpdateDto quizUpdateDto, @Valid @QuizOwner @PathVariable String uuid) {
+    public Quiz update(@Valid @RequestBody QuizUpdateDto quizUpdateDto, @Valid @QuizOwner @PathVariable UUID uuid) {
         return coreQuizService.update(quizUpdateDto, uuid);
     }
 
     @Secured("ROLE_QUIZ_UPDATE")
     @PutMapping("/remove-image/{quizUuid}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeImage(@Valid @QuizOwner @PathVariable String quizUuid) {
-        quizService.removeImage(UUID.fromString(quizUuid));
+    public void removeImage(@Valid @QuizOwner @PathVariable UUID quizUuid) {
+        quizService.removeImage(quizUuid);
     }
 
     @Secured("ROLE_QUIZ_DELETE")
     @DeleteMapping(value = "/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Valid @QuizOwner @PathVariable String uuid) {
-        quizService.delete(UUID.fromString(uuid));
+    public void delete(@Valid @QuizOwner @PathVariable UUID uuid) {
+        quizService.delete(uuid);
     }
 
     @GetMapping("/results/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Result> getResults(@PathVariable String uuid) {
+    public Set<Result> getResults(@PathVariable UUID uuid) {
         resultService.deleteByQuizUuid(uuid);
         return resultService.getByQuizUuid(uuid);
     }
 
     @GetMapping("/results-by-user/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Result> getResultsByUser(@PathVariable String uuid) {
+    public Set<Result> getResultsByUser(@PathVariable UUID uuid) {
         return coreResultService.getByQuizAndUser(uuid);
     }
 }

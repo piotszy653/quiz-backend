@@ -33,7 +33,7 @@ public class CoreQuizService {
     private final FileDataService fileDataService;
 
 
-    public LinkedHashSet<Quiz> getByOwner(){
+    public LinkedHashSet<Quiz> getByOwner() {
         return quizService.getAllByOwner(userService.getCurrentUserUuid());
     }
 
@@ -52,8 +52,8 @@ public class CoreQuizService {
                 .map(testQuestionDto -> fileDataService.getImageDataByUuid(testQuestionDto.getImageUuid()))
                 .collect(Collectors.toCollection(LinkedList::new));
 
-        LinkedList<HashMap<String, FileData>> testAnswersImageDataMaps = dto.getCreatedTestQuestions().stream()
-                .map(testQuestionDto ->  coreQuestionService.getAnswersImageUuidDataMap(testQuestionDto.getAnswers()))
+        LinkedList<HashMap<UUID, FileData>> testAnswersImageDataMaps = dto.getCreatedTestQuestions().stream()
+                .map(testQuestionDto -> coreQuestionService.getAnswersImageUuidDataMap(testQuestionDto.getAnswers()))
                 .collect(Collectors.toCollection(LinkedList::new));
 
         return quizService.create(
@@ -64,16 +64,16 @@ public class CoreQuizService {
                 trueFalseQuestionsImages,
                 testQuestionsImages,
                 testAnswersImageDataMaps
-                );
+        );
     }
 
     @Transactional
-    public Quiz update(QuizUpdateDto dto, String uuid){
+    public Quiz update(QuizUpdateDto dto, UUID uuid) {
 
 
         return quizService.update(
                 dto,
-                UUID.fromString(uuid),
+                uuid,
                 dto.getImageUuid() != null ? fileDataService.getImageDataByUuid(dto.getImageUuid()) : null
         );
     }

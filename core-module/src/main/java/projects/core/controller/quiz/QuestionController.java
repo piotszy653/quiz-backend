@@ -38,8 +38,8 @@ public class QuestionController {
     @Secured("ROLE_QUESTION_READ")
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Question getByUuid(@Valid @QuestionOwner @PathVariable String uuid) {
-        return questionService.getByUuid(UUID.fromString(uuid));
+    public Question getByUuid(@Valid @QuestionOwner @PathVariable UUID uuid) {
+        return questionService.getByUuid(uuid);
     }
 
     @Secured("ROLE_QUESTION_READ")
@@ -73,42 +73,42 @@ public class QuestionController {
     @Secured("ROLE_QUESTION_UPDATE")
     @PutMapping("/open/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public OpenQuestion updateOpenQuestion(@Valid @RequestBody OpenQuestionUpdateDto openQuestionUpdateDto, @Valid @QuestionOwner @PathVariable String uuid) {
-        return coreQuestionService.updateOpenQuestion(openQuestionUpdateDto, UUID.fromString(uuid));
+    public OpenQuestion updateOpenQuestion(@Valid @RequestBody OpenQuestionUpdateDto openQuestionUpdateDto, @Valid @QuestionOwner @PathVariable UUID uuid) {
+        return coreQuestionService.updateOpenQuestion(openQuestionUpdateDto, uuid);
     }
 
     @Secured("ROLE_QUESTION_UPDATE")
     @PutMapping("/true-false/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public TrueFalseQuestion updateTrueFalseQuestion(@Valid @RequestBody TrueFalseQuestionUpdateDto trueFalseQuestionUpdateDto, @Valid @QuestionOwner @PathVariable String uuid) {
-        return coreQuestionService.updateTrueFalseQuestion(trueFalseQuestionUpdateDto, UUID.fromString(uuid));
+    public TrueFalseQuestion updateTrueFalseQuestion(@Valid @RequestBody TrueFalseQuestionUpdateDto trueFalseQuestionUpdateDto, @Valid @QuestionOwner @PathVariable UUID uuid) {
+        return coreQuestionService.updateTrueFalseQuestion(trueFalseQuestionUpdateDto, uuid);
     }
 
     @PreAuthorize("hasRole('QUESTION_UPDATE') AND hasRole('ANSWER_CREATE')")
     @PutMapping("/test/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public TestQuestion updateTestQuestion(@Valid @RequestBody TestQuestionUpdateDto testQuestionUpdateDto, @Valid @QuestionOwner @PathVariable String uuid) {
-        return coreQuestionService.updateTestQuestion(testQuestionUpdateDto, UUID.fromString(uuid));
+    public TestQuestion updateTestQuestion(@Valid @RequestBody TestQuestionUpdateDto testQuestionUpdateDto, @Valid @QuestionOwner @PathVariable UUID uuid) {
+        return coreQuestionService.updateTestQuestion(testQuestionUpdateDto, uuid);
     }
 
     @Secured("ROLE_QUESTION_UPDATE")
     @PutMapping("/remove-image/{questionUuid}/{questionType}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeImage(@Valid @QuestionOwner @PathVariable String questionUuid, @PathVariable String questionType) {
+    public void removeImage(@Valid @QuestionOwner @PathVariable UUID questionUuid, @PathVariable String questionType) {
         questionService.removeImage(
                 QuestionType.getType(
                         questionType,
                         questionService.unsupportedTypeException(questionType)
                 ),
-                UUID.fromString(questionUuid)
+                questionUuid
         );
     }
 
     @Secured("ROLE_QUESTION_DELETE")
     @DeleteMapping(value = "/{questionType}/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Valid @QuestionOwner @PathVariable String uuid, @PathVariable String questionType) {
-        questionService.delete(UUID.fromString(uuid), questionType.toUpperCase().replaceAll("-", "_"));
+    public void delete(@Valid @QuestionOwner @PathVariable UUID uuid, @PathVariable String questionType) {
+        questionService.delete(uuid, questionType.toUpperCase().replaceAll("-", "_"));
     }
 
 }

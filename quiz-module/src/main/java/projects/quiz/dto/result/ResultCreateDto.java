@@ -8,6 +8,7 @@ import projects.quiz.utils.validator.quiz.QuizExists;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +17,9 @@ public class ResultCreateDto {
 
     @NotNull(message = "{quiz_uuid.not_null}")
     @QuizExists
-    private String quizUuid;
+    private UUID quizUuid;
 
-    private HashMap<String, Boolean> trueFalseAnswers = new HashMap<>();
+    private HashMap<UUID, Boolean> trueFalseAnswers = new HashMap<>();
 
-    private HashMap<String, Set<String>> testAnswers = new HashMap<>();
+    private HashMap<UUID, Set<UUID>> testAnswers = new HashMap<>();
 }

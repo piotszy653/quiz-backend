@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class QuizOwnerValidator implements ConstraintValidator<QuizOwner, String> {
+public class QuizOwnerValidator implements ConstraintValidator<QuizOwner, UUID> {
 
     private MessageSource messageSource;
 
@@ -22,9 +22,9 @@ public class QuizOwnerValidator implements ConstraintValidator<QuizOwner, String
     private QuizService quizService;
 
     @Override
-    public boolean isValid(String uuid, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(UUID uuid, ConstraintValidatorContext constraintValidatorContext) {
 
-        Quiz quiz = quizService.getByUuid(UUID.fromString(uuid));
+        Quiz quiz = quizService.getByUuid(uuid);
         if(!quiz.getOwnerUuid().equals(userService.getCurrentUserUuid()))
             throw new NoSuchElementException(messageSource.getMessage("quiz.not_found.uuid", new Object[]{uuid}, null));
         return true;

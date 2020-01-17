@@ -31,10 +31,6 @@ public class QuizService {
 
     private final QuestionService questionService;
 
-    public Quiz getByUuid(String uuid){
-        return getByUuid(UUID.fromString(uuid));
-    }
-
     public Quiz getByUuid(UUID uuid) {
         return quizRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("quiz.not_found.uuid", new Object[]{uuid}, null)));
@@ -47,7 +43,7 @@ public class QuizService {
     @Transactional
     public Quiz create(QuizCreateDto quizCreateDto, UUID ownerUuid, FileData imageData,
                        LinkedList<FileData> openQuestionsImages, LinkedList<FileData> trueFalseQuestionsImages,
-                       LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<String, FileData>> testAnswersImageUuidDataMap) {
+                       LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<UUID, FileData>> testAnswersImageUuidDataMap) {
 
 
         LinkedHashSet<Question> questions = createQuestions(
@@ -87,18 +83,18 @@ public class QuizService {
         quiz.getQuestions().removeAll(questionService.getAllByUuids(quizUpdateDto.getRemovedQuestionsUuids()));
         quiz.getQuestions().addAll(questionService.getAllByUuids(quizUpdateDto.getAddedQuestionsUuids()));
 
-        HashMap<QuestionType, String> assessmentsUuids = quizUpdateDto.getReplacedAssessmentsUuids();
+        HashMap<QuestionType, UUID> assessmentsUuids = quizUpdateDto.getReplacedAssessmentsUuids();
 
         assessmentsUuids.keySet()
                 .forEach(questionType -> {
-                    String assessmentUuid = assessmentsUuids.get(questionType);
+                    UUID assessmentUuid = assessmentsUuids.get(questionType);
                     if (assessmentUuid == null)
                         quiz.getAssessments().remove(questionType);
                     else
                         quiz.getAssessments()
                                 .put(
                                         questionType,
-                                        assessmentService.getByUuid(UUID.fromString(assessmentUuid))
+                                        assessmentService.getByUuid(assessmentUuid)
                                 );
                 });
 
@@ -121,7 +117,7 @@ public class QuizService {
     @Transactional
     public LinkedHashSet<Question> createQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid,
                                                    LinkedList<FileData> openQuestionsImages, LinkedList<FileData> trueFalseQuestionsImages,
-                                                   LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<String, FileData>> testAnswersImages) {
+                                                   LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<UUID, FileData>> testAnswersImages) {
 
         LinkedHashSet<Question> questions = createAllOpenQuestions(quizCreateDto, ownerUuid, openQuestionsImages);
         questions.addAll(createAllTrueFalseQuestions(quizCreateDto, ownerUuid, trueFalseQuestionsImages));
@@ -152,7 +148,7 @@ public class QuizService {
     }
 
     @Transactional
-    public LinkedHashSet<Question> createAllTestQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> testQuestionImages, LinkedList<HashMap<String, FileData>> testAnswersImages) {
+    public LinkedHashSet<Question> createAllTestQuestions(QuizCreateDto quizCreateDto, UUID ownerUuid, LinkedList<FileData> testQuestionImages, LinkedList<HashMap<UUID, FileData>> testAnswersImages) {
         return quizCreateDto.getCreatedTestQuestions().stream()
                 .map(testQuestionCreateDto -> questionService.createTestQuestion(
                         testQuestionCreateDto,
@@ -163,7 +159,7 @@ public class QuizService {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private HashMap<QuestionType, Assessment> getAssessments(Map<QuestionType, String> assessmentsUuids) {
+    private HashMap<QuestionType, Assessment> getAssessments(Map<QuestionType, UUID> assessmentsUuids) {
 
         HashMap<QuestionType, Assessment> assessments = new HashMap<>();
 
@@ -171,7 +167,7 @@ public class QuizService {
                 .forEach(questionType ->
                         assessments.put(
                                 questionType,
-                                assessmentService.getByUuid(UUID.fromString(assessmentsUuids.get(questionType)))
+                                assessmentService.getByUuid(assessmentsUuids.get(questionType))
                         )
                 );
 
