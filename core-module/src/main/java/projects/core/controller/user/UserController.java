@@ -8,14 +8,18 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.dto.user.CoreUserUpdateDto;
+import projects.core.service.quiz.CoreRateService;
 import projects.core.service.user.CoreUserService;
 import projects.core.utils.validator.user.CurrentUserHasRole;
+import projects.quiz.model.Rate;
 import projects.user.dto.user.UserCreateDto;
 import projects.user.model.user.User;
 import projects.user.service.UserService;
 import projects.user.utils.validator.currentUser.CurrentUser;
 
 import javax.validation.Valid;
+
+import java.util.Set;
 
 import static projects.core.config.enums.roles.RolesEnum.ADMIN;
 
@@ -28,6 +32,8 @@ public class UserController {
     private final UserService userService;
 
     private final CoreUserService coreUserService;
+
+    private final CoreRateService coreRateService;
 
     @Secured("ROLE_USER_READ")
     @GetMapping
@@ -63,6 +69,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") Long id) {
         coreUserService.delete(id);
+    }
+
+    @GetMapping("/rates")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<Rate> getRates() {
+        return coreRateService.getAllByUser();
     }
 
 }

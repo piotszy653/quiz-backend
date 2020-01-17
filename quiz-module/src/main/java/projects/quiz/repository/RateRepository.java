@@ -16,4 +16,6 @@ public interface RateRepository extends CrudRepository<Rate, Long> {
     LinkedHashSet<Rate> findAllByUserUuid(UUID userUuid);
 
     LinkedHashSet<Rate> findAllByRatedObjectUuid(UUID ratedObjectUuid);
+
+    LinkedHashSet<Rate> findAllByUserUuidAndRatedObjectUuid(UUID userUuid, UUID ratedObjectUuid);
 }

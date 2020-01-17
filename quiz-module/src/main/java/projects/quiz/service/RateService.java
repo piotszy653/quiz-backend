@@ -5,8 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.quiz.dto.rate.RateCreateDto;
-import projects.quiz.dto.rate.RateUpdateDto;
+import projects.quiz.dto.rate.RateDto;
 import projects.quiz.model.Rate;
 import projects.quiz.repository.RateRepository;
 import projects.quiz.utils.enums.ObjectType;
@@ -14,6 +13,7 @@ import projects.quiz.utils.enums.ObjectType;
 import javax.validation.Valid;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -51,13 +51,17 @@ public class RateService {
         return rateRepository.findAllByRatedObjectUuid(objectUuid);
     }
 
-    @Transactional
-    public Rate create(RateCreateDto dto, ObjectType type, UUID userUuid) {
-        return save(new Rate(dto, type, userUuid));
+    public Set<Rate> getAllByUserAndObject(UUID userUuid, UUID quizUuid) {
+        return  rateRepository.findAllByUserUuidAndRatedObjectUuid(userUuid, quizUuid);
     }
 
     @Transactional
-    public Rate update(RateUpdateDto dto, UUID uuid) {
+    public Rate create(RateDto dto, UUID objectUuid, ObjectType type, UUID userUuid) {
+        return save(new Rate(dto, objectUuid, type, userUuid));
+    }
+
+    @Transactional
+    public Rate update(RateDto dto, UUID uuid) {
         Rate rate = getByUuid(uuid);
         updateRate(rate, dto);
         return save(rate);
@@ -78,7 +82,7 @@ public class RateService {
         rateRepository.delete(getByUuid(uuid));
     }
 
-    private void updateRate(Rate rate, RateUpdateDto dto) {
+    private void updateRate(Rate rate, RateDto dto) {
         rate.setRate(dto.getRate() != null ? dto.getRate() : rate.getRate());
         rate.setOpinion(dto.getOpinion() != null ? dto.getOpinion() : rate.getOpinion());
     }

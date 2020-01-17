@@ -1,4 +1,4 @@
-package projects.core.controller;
+package projects.core.controller.quiz;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

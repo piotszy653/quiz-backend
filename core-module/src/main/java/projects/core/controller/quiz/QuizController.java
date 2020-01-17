@@ -1,4 +1,4 @@
-package projects.core.controller;
+package projects.core.controller.quiz;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,6 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.service.quiz.CoreQuizService;
+import projects.core.service.quiz.CoreRateService;
 import projects.core.service.quiz.CoreResultService;
 import projects.core.utils.validator.quiz.QuizOwner;
 import projects.quiz.dto.quiz.QuizCreateDto;
@@ -33,6 +34,8 @@ public class QuizController {
     private final ResultService resultService;
 
     private final CoreResultService coreResultService;
+
+    private final CoreRateService coreRateService;
 
     @Secured("ROLE_QUIZ_READ")
     @GetMapping("/{uuid}")
@@ -88,5 +91,4 @@ public class QuizController {
     public Set<Result> getResultsByUser(@PathVariable String uuid) {
         return coreResultService.getByQuizAndUser(uuid);
     }
-
 }

@@ -1,24 +1,24 @@
-package projects.quiz.utils.validator.quiz;
+package projects.quiz.utils.validator.question;
 
 import lombok.AllArgsConstructor;
-import projects.quiz.service.QuizService;
+import projects.quiz.service.QuestionService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class QuizExistsValidator implements ConstraintValidator<QuizExists, UUID> {
+public class QuestionExistsValidator implements ConstraintValidator<QuestionExists, UUID> {
 
-    private QuizService quizService;
+    private QuestionService questionService;
 
     @Override
     public boolean isValid(UUID uuid, ConstraintValidatorContext constraintValidatorContext) {
 
-        if (uuid == null)
+        if(uuid == null)
             return true;
 
-        quizService.getByUuid(uuid);
+        questionService.getByUuid(uuid);
         return true;
     }
 }

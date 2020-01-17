@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import projects.quiz.dto.rate.RateCreateDto;
-import projects.quiz.dto.rate.RateUpdateDto;
+import projects.quiz.dto.rate.RateDto;
 import projects.quiz.utils.enums.ObjectType;
 
 import javax.persistence.Column;
@@ -54,8 +53,8 @@ public class Rate extends AbstractBaseEntity<Long> {
     @Column(nullable = false, length = 1000)
     private String opinion = "";
 
-    public Rate(RateCreateDto dto, ObjectType type, UUID userUuid) {
-        this.ratedObjectUuid = dto.getRatedObjectUuid();
+    public Rate(RateDto dto, UUID ratedObjectUuid, ObjectType type, UUID userUuid) {
+        this.ratedObjectUuid = ratedObjectUuid;
         this.userUuid = userUuid;
         this.objectType = type;
         this.rate = dto.getRate() != null ? dto.getRate() : this.rate;
