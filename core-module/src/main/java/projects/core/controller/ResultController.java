@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import projects.core.service.result.CoreResultService;
+import projects.core.service.quiz.CoreResultService;
 import projects.quiz.dto.result.ResultCreateDto;
 import projects.quiz.model.Result;
 import projects.quiz.service.ResultService;

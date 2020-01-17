@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.core.service.question.CoreQuestionService;
 import projects.quiz.dto.quiz.QuizCreateDto;
 import projects.quiz.dto.quiz.QuizUpdateDto;
 import projects.quiz.model.Quiz;

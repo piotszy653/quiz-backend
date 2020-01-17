@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import projects.core.service.assessment.CoreAssessmentService;
+import projects.core.service.quiz.CoreAssessmentService;
 import projects.core.utils.validator.assessment.AssessmentOwner;
 import projects.quiz.dto.assessment.AssessmentCreateDto;
 import projects.quiz.dto.assessment.AssessmentUpdateDto;

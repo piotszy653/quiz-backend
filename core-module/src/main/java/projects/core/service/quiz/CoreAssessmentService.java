@@ -1,4 +1,4 @@
-package projects.core.service.assessment;
+package projects.core.service.quiz;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

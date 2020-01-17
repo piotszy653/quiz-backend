@@ -1,4 +1,4 @@
-package projects.core.service.question;
+package projects.core.service.quiz;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;

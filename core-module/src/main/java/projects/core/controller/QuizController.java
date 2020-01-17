@@ -6,7 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.service.quiz.CoreQuizService;
-import projects.core.service.result.CoreResultService;
+import projects.core.service.quiz.CoreResultService;
 import projects.core.utils.validator.quiz.QuizOwner;
 import projects.quiz.dto.quiz.QuizCreateDto;
 import projects.quiz.dto.quiz.QuizUpdateDto;
