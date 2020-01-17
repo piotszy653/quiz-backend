@@ -15,7 +15,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
@@ -26,9 +25,6 @@ import static javax.persistence.EnumType.STRING;
 @NoArgsConstructor
 @Data
 public class Rate extends AbstractBaseEntity<Long> {
-
-    @Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime creationTime = OffsetDateTime.now();
 
     @NotNull(message = "rated_object_uuid.not_null")
     @Column(nullable = false)

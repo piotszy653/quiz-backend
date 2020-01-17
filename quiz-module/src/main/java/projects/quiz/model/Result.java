@@ -31,9 +31,6 @@ import static projects.quiz.utils.ResultHelper.calcTrueFalsePoints;
 @AllArgsConstructor
 public class Result extends AbstractBaseEntity<Long> {
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime creationTime = OffsetDateTime.now();
-
     @NotNull(message = "{user_uuid.not_null}")
     @Column(nullable = false)
     @Type(type = "org.hibernate.type.PostgresUUIDType")

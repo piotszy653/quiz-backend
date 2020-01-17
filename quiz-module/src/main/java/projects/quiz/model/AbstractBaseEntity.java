@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -25,4 +26,7 @@ public abstract class AbstractBaseEntity<T> {
     @NotNull(message = "{uuid.not_null}")
     @Type(type="org.hibernate.type.PostgresUUIDType")
     private final UUID uuid = UUID.randomUUID();
+
+    @Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime creationTime = OffsetDateTime.now();
 }
