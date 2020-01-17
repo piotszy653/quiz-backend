@@ -6,51 +6,51 @@ import projects.quiz.model.question.TestQuestion;
 import projects.quiz.model.question.TrueFalseQuestion;
 
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static projects.quiz.utils.enums.QuestionType.TEST;
 import static projects.quiz.utils.enums.QuestionType.TRUE_FALSE;
 
 public class ResultHelper {
 
-    private static void addPoints(BigDecimal points, Float questionPoints, Assessment assessment) {
+    private static BigDecimal cutPoints(Float questionPoints, Assessment assessment) {
         if (assessment.getMaxPoints() != null)
             questionPoints = questionPoints > assessment.getMaxPoints() ? assessment.getMaxPoints() : questionPoints;
         if (assessment.getMinPoints() != null)
             questionPoints = questionPoints < assessment.getMinPoints() ? assessment.getMinPoints() : questionPoints;
-        points = points.add(new BigDecimal(questionPoints));
+        return new BigDecimal(questionPoints);
     }
 
     public static Float calcTrueFalsePoints(Quiz quiz, Set<TrueFalseQuestion> trueFalseQuestions, Map<UUID, Boolean> trueFalseAnswers) {
         BigDecimal points = new BigDecimal(0.0);
         Assessment tfAssessment = quiz.getAssessments().get(TRUE_FALSE);
-        trueFalseQuestions.forEach(question -> {
+        for (UUID answeredQuestion : trueFalseAnswers.keySet()) {
             Float tfPoints = 0.0f;
-            tfPoints += Boolean.valueOf(question.getAnswer()).equals(trueFalseAnswers.get(question.getUuid())) ? tfAssessment.getCorrectRate() : tfAssessment.getIncorrectRate();
-            addPoints(points, tfPoints, tfAssessment);
-        });
+            Optional<TrueFalseQuestion> question = trueFalseQuestions.stream().filter(trueFalseQuestion -> trueFalseQuestion.getUuid().equals(answeredQuestion)).findFirst();
+            if (question.isPresent()) {
+                Boolean answer = trueFalseAnswers.get(question.get().getUuid());
+                if (answer != null) {
+                    tfPoints += Boolean.valueOf(question.get().getAnswer()).equals(trueFalseAnswers.get(question.get().getUuid())) ? tfAssessment.getCorrectRate() : tfAssessment.getIncorrectRate();
+                    points = points.add(cutPoints(tfPoints, tfAssessment));
+                }
+            }
+        }
         return points.floatValue();
     }
 
     public static Float calcTestPoints(Quiz quiz, Set<TestQuestion> testQuestions, Map<UUID, Set<UUID>> testAnswers) {
         BigDecimal points = new BigDecimal(0.0);
         Assessment testAssessment = quiz.getAssessments().get(TEST);
-        testQuestions.forEach(question -> {
-            Set<UUID> pickedAnswers = testAnswers.get(question.getUuid());
-            if (pickedAnswers != null) {
-                Set<Float> answersPoints = pickedAnswers.stream().map(answerUuid ->
-                        question.getAnswersCorrectness().get(answerUuid) ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate()
-                ).collect(Collectors.toSet());
+        for (UUID answeredQuestion : testAnswers.keySet()) {
+            Set<UUID> pickedAnswers = testAnswers.get(answeredQuestion);
+            Optional<TestQuestion> question = testQuestions.stream().filter(testQuestion -> testQuestion.getUuid().equals(answeredQuestion)).findFirst();
+            if (question.isPresent() && pickedAnswers != null) {
                 Float testPoints = 0.0f;
-                for (Float answerPoints : answersPoints) {
-                    testPoints += answerPoints;
-                }
-                addPoints(points, testPoints, testAssessment);
+                for (UUID answerUuid : pickedAnswers)
+                    testPoints += question.get().getAnswersCorrectness().get(answerUuid) ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate();
+                points = points.add(cutPoints(testPoints, testAssessment));
             }
-        });
+        }
         return points.floatValue();
     }
 }

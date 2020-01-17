@@ -1,6 +1,9 @@
 package projects.quiz.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import projects.quiz.dto.result.ResultCreateDto;
 import projects.quiz.model.question.Question;
@@ -12,10 +15,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static projects.quiz.utils.ResultHelper.calcTestPoints;
@@ -29,7 +32,7 @@ import static projects.quiz.utils.ResultHelper.calcTrueFalsePoints;
 public class Result extends AbstractBaseEntity<Long> {
 
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime offsetDateTime = OffsetDateTime.now();
+    private OffsetDateTime offsetDateTime = OffsetDateTime.now(); //todo rename
 
     @NotNull(message = "{user_uuid.not_null}")
     @Column(nullable = false)
