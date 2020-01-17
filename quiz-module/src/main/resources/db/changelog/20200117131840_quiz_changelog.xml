@@ -2,10 +2,10 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="Piotr Szymański (generated)" id="1579168609012-1">
-        <createTable tableName="result">
+    <changeSet author="Piotr Szymański (generated)" id="1579267128911-1">
+        <createTable tableName="rate">
             <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="resultPK"/>
+                <constraints primaryKey="true" primaryKeyName="ratePK"/>
             </column>
             <column name="uuid" type="UUID">
                 <constraints nullable="false"/>
@@ -13,17 +13,16 @@
             <column name="creation_time" type="TIMESTAMP WITH TIME ZONE">
                 <constraints nullable="false"/>
             </column>
-            <column name="test_answers" type="BYTEA"/>
-            <column name="true_false_answers" type="BYTEA"/>
-            <column name="user_uuid" type="UUID">
+            <column name="object_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="quiz_id" type="BIGINT"/>
+            <column name="opinion" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="INT"/>
+            <column name="rated_object_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
-    </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1579168609012-2">
-        <addForeignKeyConstraint baseColumnNames="quiz_id" baseTableName="result"
-                                 constraintName="FK25wxfk8hlyt83jaa1no4anjsg" deferrable="false"
-                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="quiz"/>
     </changeSet>
 </databaseChangeLog>
