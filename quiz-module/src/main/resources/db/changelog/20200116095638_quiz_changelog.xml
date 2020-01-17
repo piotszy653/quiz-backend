@@ -10,7 +10,7 @@
             <column name="uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="offset_date_time" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="creation_time" type="TIMESTAMP WITH TIME ZONE"/>
             <column name="test_answers" type="BYTEA"/>
             <column name="true_false_answers" type="BYTEA"/>
             <column name="user_uuid" type="UUID">

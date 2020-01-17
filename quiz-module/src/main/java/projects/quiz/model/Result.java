@@ -32,7 +32,7 @@ import static projects.quiz.utils.ResultHelper.calcTrueFalsePoints;
 public class Result extends AbstractBaseEntity<Long> {
 
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime offsetDateTime = OffsetDateTime.now(); //todo rename
+    private OffsetDateTime creationTime = OffsetDateTime.now();
 
     @NotNull(message = "{user_uuid.not_null}")
     @Column(nullable = false)
