@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-1">
+        <createTable tableName="user_profile">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="user_profilePK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-2">
+        <createTable tableName="user_profile_friends">
+            <column name="user_profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friends_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-3">
+        <addColumn tableName="user">
+            <column name="profile_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-4">
+        <addPrimaryKey columnNames="user_profile_id, friends_id" tableName="user_profile_friends"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-5">
+        <addForeignKeyConstraint baseColumnNames="friends_id" baseTableName="user_profile_friends"
+                                 constraintName="FK6uos9toskr117jgt2g6thxsf4" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-6">
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="user"
+                                 constraintName="FKij8iv0fayghyrvh4stseg9k9p" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579345334665-7">
+        <addForeignKeyConstraint baseColumnNames="user_profile_id" baseTableName="user_profile_friends"
+                                 constraintName="FKmxlb840payv6vxnv3vangdn6f" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+    </changeSet>
+</databaseChangeLog>

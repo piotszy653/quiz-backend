@@ -29,14 +29,12 @@ import java.util.UUID;
 @Table(name = "\"user\"")
 public class User extends AbstractBaseEntity<Long> implements UserDetails {
 
-    @NonNull
     @Column(nullable = false, unique = true)
     @NotBlank(message = "{username.not_blank}")
     @Email(message = "{username.mail_required}")
     @Size(max = 255, message = "username.max:255")
     private String username;
 
-    @NonNull
     @Column(nullable = false)
     @NotBlank(message = "{password.not_blank}")
     @Size(max = 255, message = "password.max:255")
@@ -52,7 +50,11 @@ public class User extends AbstractBaseEntity<Long> implements UserDetails {
     @Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID uuid;
 
+    @NotNull(message = "{profile.not_null}")
     @NonNull
+    @OneToOne
+    private UserProfile profile;
+
     @NotNull(message = "{role_group.not_null}")
     @ManyToOne(fetch = FetchType.EAGER)
     RoleGroup roleGroup;
@@ -61,8 +63,9 @@ public class User extends AbstractBaseEntity<Long> implements UserDetails {
         generateUuid();
     }
 
-    public User(String username, String password, RoleGroup roleGroup) {
+    public User(String username, String password, UserProfile profile, RoleGroup roleGroup) {
         this.username = username;
+        this.profile = profile;
         this.password = password;
         this.roleGroup = roleGroup;
         generateUuid();

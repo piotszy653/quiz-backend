@@ -10,8 +10,10 @@ import projects.core.config.enums.bootstrap.userModule.DefaultAdminEnum;
 import projects.quiz.repository.AssessmentRepository;
 import projects.quiz.service.AssessmentService;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
 import projects.user.repository.roles.RoleGroupRepository;
 import projects.user.repository.roles.RoleRepository;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.repository.user.UserRepository;
 
 @Slf4j
@@ -22,9 +24,10 @@ public class ProductionBootstrapService extends BootstrapService {
 
     @Builder
     public ProductionBootstrapService(RoleGroupRepository roleGroupRepository, RoleRepository roleRepository, UserRepository userRepository,
-                                      BootstrapPartService bootstrapPartService, AssessmentRepository assessmentRepository
+                                      UserProfileRepository userProfileRepository, BootstrapPartService bootstrapPartService,
+                                      AssessmentRepository assessmentRepository
     ) {
-        super(roleGroupRepository, roleRepository, userRepository, bootstrapPartService, assessmentRepository);
+        super(roleGroupRepository, roleRepository, userRepository, userProfileRepository, bootstrapPartService, assessmentRepository);
     }
 
     @Override
@@ -42,6 +45,7 @@ public class ProductionBootstrapService extends BootstrapService {
         User user = new User(
                 DefaultAdminEnum.ADMIN.username,
                 new BCryptPasswordEncoder().encode(DefaultAdminEnum.ADMIN.password),
+                userProfileRepository.save(new UserProfile(null)),
                 roleGroupRepository.findByName(DefaultAdminEnum.ADMIN.rolesEnum.name())
         );
         user.setEnabled(true);

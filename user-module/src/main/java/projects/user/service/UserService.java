@@ -3,6 +3,8 @@ package projects.user.service;
 import projects.user.dto.user.UserCreateDto;
 import projects.user.dto.user.UserUpdateDto;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.repository.user.UserRepository;
 import projects.user.security.model.UserContext;
 import projects.user.utils.validator.currentUser.CurrentUser;
@@ -20,10 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,6 +33,8 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
+
+    private UserProfileRepository userProfileRepository;
 
     private RoleGroupService roleGroupService;
 
@@ -89,9 +92,15 @@ public class UserService implements UserDetailsService {
         User user = new User(
                 username,
                 new BCryptPasswordEncoder().encode(userCreateDto.getPassword()),
+                userProfileRepository.save(new UserProfile(userCreateDto.getName())),
                 roleGroupService.getByName(userCreateDto.getRoleGroup()));
         user.setEnabled(userCreateDto.isEnabled());
         return save(user);
+    }
+
+    @Transactional
+    public Set<User> saveAll(User... users){
+        return Stream.of(users).map(this::save).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -104,6 +113,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id)
                 .map(user -> {
                             user.setUsername(userUpdateDto.getUsername() != null ? userUpdateDto.getUsername() : user.getUsername());
+                            user.getProfile().setName(userUpdateDto.getName() != null ? userUpdateDto.getName() : user.getProfile().getName());
                             user.setPassword(userUpdateDto.getPassword() != null ? new BCryptPasswordEncoder().encode(userUpdateDto.getPassword()) : user.getPassword());
                             user.setEnabled(userUpdateDto.getEnabled() != null ? userUpdateDto.getEnabled() : user.isEnabled());
                             user.setRoleGroup(userUpdateDto.getRoleGroup() != null ? roleGroupService.getByName(userUpdateDto.getRoleGroup()) : user.getRoleGroup());
@@ -146,5 +156,17 @@ public class UserService implements UserDetailsService {
 
     public boolean isCurrentUsersId(long userId) {
         return getCurrentUser().isAdmin() || getCurrentUser().getId() == userId;
+    }
+
+    @Transactional
+    public void removeFriend(UUID uuid) {
+
+        User currentUser = getCurrentUser();
+        User removedUser = findByUuid(uuid);
+
+        currentUser.getProfile().getFriends().remove(removedUser);
+        removedUser.getProfile().getFriends().remove(currentUser);
+
+        saveAll(currentUser, removedUser);
     }
 }

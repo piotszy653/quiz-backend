@@ -14,12 +14,13 @@ import projects.core.utils.validator.user.CurrentUserHasRole;
 import projects.quiz.model.Rate;
 import projects.user.dto.user.UserCreateDto;
 import projects.user.model.user.User;
+import projects.user.service.InvitationService;
 import projects.user.service.UserService;
 import projects.user.utils.validator.currentUser.CurrentUser;
 
 import javax.validation.Valid;
-
 import java.util.Set;
+import java.util.UUID;
 
 import static projects.core.config.enums.roles.RolesEnum.ADMIN;
 
@@ -34,6 +35,8 @@ public class UserController {
     private final CoreUserService coreUserService;
 
     private final CoreRateService coreRateService;
+
+    private final InvitationService invitationService;
 
     @Secured("ROLE_USER_READ")
     @GetMapping
@@ -75,6 +78,21 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public Set<Rate> getRates() {
         return coreRateService.getAllByUser();
+    }
+
+    @GetMapping("/invited-users")
+    public Set<User> getInvitedUsers() {
+        return invitationService.getInvitedUsers();
+    }
+
+    @GetMapping("/inviting-users")
+    public Set<User> getInvitingUsers() {
+        return invitationService.getInvitingUsers();
+    }
+
+    @PutMapping("/remove-friend/{uuid}")
+    public void removeFriend(@PathVariable UUID uuid){
+        userService.removeFriend(uuid);
     }
 
 }

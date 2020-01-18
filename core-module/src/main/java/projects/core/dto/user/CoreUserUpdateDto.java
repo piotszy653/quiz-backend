@@ -17,8 +17,8 @@ public class CoreUserUpdateDto extends UserUpdateDto {
     @CurrentUserHasRole(roles = {ADMIN})
     private final String roleGroup;
 
-    public CoreUserUpdateDto(String username, String password, Boolean enabled, String roleGroup) {
-        super(username, password, enabled, roleGroup);
+    public CoreUserUpdateDto(String username, String name, String password, Boolean enabled, String roleGroup) {
+        super(username, name, password, enabled, roleGroup);
         this.enabled = enabled;
         this.roleGroup = roleGroup;
     }

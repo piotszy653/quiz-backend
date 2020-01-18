@@ -19,6 +19,7 @@ import projects.user.data.IUserData;
 import projects.user.dto.user.UserCreateDto;
 import projects.user.dto.user.UserUpdateDto;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
 import projects.user.repository.user.UserRepository;
 import projects.user.security.model.UserContext;
 import projects.user.service.RoleGroupService;
@@ -47,12 +48,15 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
 
     @Mock
     MessageSource messageSource;
+    
+    private UserProfile defaultProfile;
 
     private User defaultUser;
 
     @Before
     public void init() {
-        defaultUser = getDefaultUser(getUserRoleGroup());
+        defaultProfile = new UserProfile(null);
+        defaultUser = getDefaultUser(defaultProfile, getUserRoleGroup());
     }
 
     @Test
@@ -73,7 +77,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     public void loadUserByUsernameWithCorrectUsername() {
 
         //given
-        when(userRepository.findByUsername(getDefaultUsername())).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userRepository.findByUsername(getDefaultUsername())).thenReturn(Optional.of(defaultUser));
 
         //when
         User user = (User) userService.loadUserByUsername(getDefaultUsername());
@@ -96,7 +100,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     @Test
     public void findOneWithCorrectId() {
         //given
-        when(userRepository.findById(1L)).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(defaultUser));
 
         //when
         User user = userService.findOne(1L);
@@ -137,7 +141,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     public void createWithExistingUsername() {
 
         //given
-        when(userRepository.findByUsername(getDefaultUsername())).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userRepository.findByUsername(getDefaultUsername())).thenReturn(Optional.of(defaultUser));
 
         //when
         userService.create(getDefaultUserCreateDto(getDefaultRoleGroup()));
@@ -147,7 +151,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     public void updateWithCorrectId() {
         //given
         UserUpdateDto userUpdateDto = getDefaultUserUpdateDto(getDefaultRoleGroup());
-        when(userRepository.findById(1L)).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(defaultUser));
         when(roleGroupService.getByName(getDefaultRoleGroup().getName())).thenReturn(getDefaultRoleGroup());
 
         //when
@@ -164,7 +168,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     public void updateWithNullFields() {
         //given
         UserUpdateDto userUpdateDto = getAnotherUserUpdateDto(getRoleGroup("AAA"));
-        User user = getDefaultUser(getDefaultRoleGroup());
+        User user = defaultUser;
 
         when(roleGroupService.getByName(userUpdateDto.getRoleGroup())).thenReturn(getRoleGroup(userUpdateDto.getRoleGroup()));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -187,7 +191,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     @Test
     public void deleteWithCorrectId() {
         //given
-        when(userRepository.findById(1L)).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(defaultUser));
         //when
         userService.delete(1L);
     }
@@ -205,7 +209,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     @Test
     public void validateMatchingUserId() {
         //given
-        User user = getDefaultUser(getDefaultRoleGroup());
+        User user = defaultUser;
         user.setId(1L);
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         UserContext userContext = new UserContext(getDefaultUsername(), null);
@@ -222,7 +226,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
     @Test(expected = IllegalArgumentException.class)
     public void validateNotMatchingUserId() {
         //given
-        User user = getDefaultUser(getUserRoleGroup());
+        User user = getDefaultUser(defaultProfile, getUserRoleGroup());
         user.setId(1L);
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         UserContext userContext = new UserContext(getDefaultUsername(), null);

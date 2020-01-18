@@ -14,6 +14,7 @@ import projects.user.data.IUserData;
 import projects.user.dto.resetPassword.ForgotPasswordDto;
 import projects.user.model.ResetPasswordToken;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
 import projects.user.repository.ResetPasswordTokenRepository;
 import projects.user.service.MailService;
 import projects.user.service.UserService;
@@ -43,6 +44,9 @@ public class ResetPasswordServiceTest implements IResetPasswordData, IUserData, 
     @Mock
     MessageSource messageSource;
 
+
+    private UserProfile defaultProfile = new UserProfile(null);
+
     @Test
     public void processForgotPasswordWithCorrectUsername() {
 
@@ -53,7 +57,7 @@ public class ResetPasswordServiceTest implements IResetPasswordData, IUserData, 
                 getDefaultExpirationTime()
         );
         ForgotPasswordDto forgotPasswordDto = getDefaultForgotPasswordDto();
-        User user = getDefaultUser(getDefaultRoleGroup());
+        User user = getDefaultUser(defaultProfile, getDefaultRoleGroup());
         when(userService.findByUsername(forgotPasswordDto.getUsername())).thenReturn(Optional.ofNullable(user));
         when(messageSource.getMessage("email.reset.password.subject", null, LocaleContextHolder.getLocale())).thenReturn("");
 
@@ -90,8 +94,8 @@ public class ResetPasswordServiceTest implements IResetPasswordData, IUserData, 
 
         //given
         String uuid = getUuid();
-        User user = getDefaultUser(getDefaultRoleGroup());
-        ResetPasswordToken token = getDefaultResetPasswordToken(uuid, getDefaultUser(getDefaultRoleGroup()));
+        User user = getDefaultUser(defaultProfile, getDefaultRoleGroup());
+        ResetPasswordToken token = getDefaultResetPasswordToken(uuid, getDefaultUser(defaultProfile, getDefaultRoleGroup()));
         user.setPassword(getDefaultResetPasswordDto(uuid).getPassword());
         when(resetPasswordTokenRepository.findByUuid(uuid)).thenReturn(Optional.ofNullable(token));
 

@@ -14,6 +14,7 @@ import projects.user.data.IUserData;
 import projects.user.dto.registration.LoginResponseDto;
 import projects.user.dto.registration.RegistrationDto;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
 import projects.user.security.model.UserContext;
 import projects.user.security.model.token.AccessJwtToken;
 import projects.user.security.model.token.JwtTokenFactory;
@@ -49,6 +50,10 @@ public class RegistrationServiceTest implements IRegistrationData, IUserData, IR
     @Mock
     JwtTokenFactory tokenFactory;
 
+
+
+    private UserProfile defaultProfile = new UserProfile(null);
+
     @Test
     public void register() {
 
@@ -77,7 +82,7 @@ public class RegistrationServiceTest implements IRegistrationData, IUserData, IR
     @Test(expected = IllegalArgumentException.class)
     public void registerWithExistingMail() {
         //given
-        when(userService.findByUsername(getDefaultUsername())).thenReturn(Optional.of(getDefaultUser(getDefaultRoleGroup())));
+        when(userService.findByUsername(getDefaultUsername())).thenReturn(Optional.of(getDefaultUser(defaultProfile, getDefaultRoleGroup())));
 
         //when
         registrationService.register(getDefaultRegistrationDto(true));

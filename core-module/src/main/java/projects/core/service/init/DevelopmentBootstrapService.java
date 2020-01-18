@@ -12,8 +12,10 @@ import projects.core.config.init.BootstrapPartName;
 import projects.quiz.model.Assessment;
 import projects.quiz.repository.AssessmentRepository;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
 import projects.user.repository.roles.RoleGroupRepository;
 import projects.user.repository.roles.RoleRepository;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.repository.user.UserRepository;
 
 import java.math.BigDecimal;
@@ -30,9 +32,10 @@ public class DevelopmentBootstrapService extends BootstrapService {
     @Builder
 
     public DevelopmentBootstrapService(RoleGroupRepository roleGroupRepository, RoleRepository roleRepository, UserRepository userRepository,
-                                       BootstrapPartService bootstrapPartService, AssessmentRepository assessmentRepository
+                                       UserProfileRepository userProfileRepository, BootstrapPartService bootstrapPartService,
+                                       AssessmentRepository assessmentRepository
     ) {
-        super(roleGroupRepository, roleRepository, userRepository, bootstrapPartService, assessmentRepository);
+        super(roleGroupRepository, roleRepository, userRepository, userProfileRepository, bootstrapPartService, assessmentRepository);
 
     }
 
@@ -55,6 +58,8 @@ public class DevelopmentBootstrapService extends BootstrapService {
             User user = new User(
                     value.username,
                     new BCryptPasswordEncoder().encode(value.password),
+                    userProfileRepository.save(new UserProfile(null)),
+
                     roleGroupRepository.findByName(value.rolesEnum.name())
             );
             user.setEnabled(true);

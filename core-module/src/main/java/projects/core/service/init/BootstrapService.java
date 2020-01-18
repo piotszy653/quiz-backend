@@ -10,6 +10,7 @@ import projects.user.model.roles.Role;
 import projects.user.model.roles.RoleGroup;
 import projects.user.repository.roles.RoleGroupRepository;
 import projects.user.repository.roles.RoleRepository;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.repository.user.UserRepository;
 
 import javax.transaction.Transactional;
@@ -30,6 +31,8 @@ public abstract class BootstrapService {
     private final RoleRepository roleRepository;
 
     protected final UserRepository userRepository;
+
+    protected final UserProfileRepository userProfileRepository;
 
     protected final BootstrapPartService bootstrapPartService;
 

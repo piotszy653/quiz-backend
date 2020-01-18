@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import projects.user.dto.registration.LoginResponseDto;
 import projects.user.dto.registration.RegistrationDto;
 import projects.user.model.user.User;
+import projects.user.model.user.UserProfile;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.security.model.UserContext;
 import projects.user.security.model.token.JwtTokenFactory;
 
@@ -24,6 +26,8 @@ import java.util.HashMap;
 public class RegistrationService {
 
     private final UserService userService;
+
+    private final UserProfileRepository userProfileRepository;
 
     private final MailService mailService;
 
@@ -49,6 +53,7 @@ public class RegistrationService {
         User user = new User(
                 registrationDto.getUsername(),
                 new BCryptPasswordEncoder().encode(registrationDto.getPassword()),
+                userProfileRepository.save(new UserProfile(registrationDto.getName())),
                 roleGroupService.getByName("USER"));
         user.setEnabled(true);
         userService.save(user);

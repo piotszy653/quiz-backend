@@ -16,6 +16,9 @@ public class UserCreateDto {
     @Size(max = 255, message = "username.max:255")
     private final String username;
 
+    @Size(max = 255, message = "name.max:255")
+    private final String name;
+
     @NotBlank(message = "{password.not_blank}")
     @Size(min = 5, message = "password.min.5")
     private final String password;
@@ -26,8 +29,9 @@ public class UserCreateDto {
     @GroupAllowed
     private final String roleGroup;
 
-    public UserCreateDto(String username, String password, boolean enabled, String roleGroup) {
+    public UserCreateDto(String username, String name, String password, boolean enabled, String roleGroup) {
         this.username = username != null ? username.trim().toLowerCase() : null;
+        this.name = name;
         this.password = password;
         this.enabled = enabled;
         this.roleGroup = roleGroup;
