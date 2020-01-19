@@ -6,19 +6,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import projects.quiz.model.question.Question;
+import projects.quiz.utils.enums.PrivacyPolicy;
 import projects.quiz.utils.enums.QuestionType;
 import projects.quiz.utils.validator.question.QuestionTypesAssessmentsMatch;
 import projects.storage.model.FileData;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
 
 @EqualsAndHashCode(callSuper = true)
@@ -37,6 +38,11 @@ public class Quiz extends AbstractBaseEntity<Long> {
     @ManyToOne(fetch = EAGER)
     private FileData imageData;
 
+    @NotNull(message = "{privacy_policy.not_null}")
+    @Column(nullable = false)
+    @Enumerated(value = STRING)
+    PrivacyPolicy privacyPolicy;
+
     @ManyToMany(fetch = EAGER)
     @NotNull(message = "{questions.not_null}")
     private Set<Question> questions;
@@ -45,14 +51,14 @@ public class Quiz extends AbstractBaseEntity<Long> {
     @JoinColumn(name = "quiz_id")
     private Map<QuestionType, Assessment> assessments;
 
-    public void removeImage(){
+    public void removeImage() {
         imageData = null;
     }
 
-    public Set<QuestionType> getQuestionTypes(){
+    public Set<QuestionType> getQuestionTypes() {
 
         Set<QuestionType> types = Stream.of(QuestionType.values()).map(type -> {
-            if(questions.stream().anyMatch(question -> question.getType().equals(type)))
+            if (questions.stream().anyMatch(question -> question.getType().equals(type)))
                 return type;
             return null;
         }).collect(Collectors.toSet());

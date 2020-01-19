@@ -11,6 +11,7 @@ import projects.quiz.model.Assessment;
 import projects.quiz.model.Quiz;
 import projects.quiz.model.question.Question;
 import projects.quiz.repository.QuizRepository;
+import projects.quiz.utils.enums.PrivacyPolicy;
 import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
@@ -62,6 +63,7 @@ public class QuizService {
         return save(new Quiz(
                 ownerUuid,
                 imageData,
+                quizCreateDto.getPrivacyPolicy(),
                 questions,
                 assessments
         ));
@@ -74,16 +76,16 @@ public class QuizService {
     }
 
     @Transactional
-    public Quiz update(QuizUpdateDto quizUpdateDto, UUID uuid, FileData imageData) {
+    public Quiz update(QuizUpdateDto dto, UUID uuid, FileData imageData) {
 
         Quiz quiz = getByUuid(uuid);
 
         quiz.setImageData(imageData != null ? imageData : quiz.getImageData());
+        quiz.setPrivacyPolicy(dto.getPrivacyPolicy() != null ? dto.getPrivacyPolicy() : quiz.getPrivacyPolicy());
+        quiz.getQuestions().removeAll(questionService.getAllByUuids(dto.getRemovedQuestionsUuids()));
+        quiz.getQuestions().addAll(questionService.getAllByUuids(dto.getAddedQuestionsUuids()));
 
-        quiz.getQuestions().removeAll(questionService.getAllByUuids(quizUpdateDto.getRemovedQuestionsUuids()));
-        quiz.getQuestions().addAll(questionService.getAllByUuids(quizUpdateDto.getAddedQuestionsUuids()));
-
-        HashMap<QuestionType, UUID> assessmentsUuids = quizUpdateDto.getReplacedAssessmentsUuids();
+        HashMap<QuestionType, UUID> assessmentsUuids = dto.getReplacedAssessmentsUuids();
 
         assessmentsUuids.keySet()
                 .forEach(questionType -> {
