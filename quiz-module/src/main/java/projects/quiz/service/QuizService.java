@@ -11,7 +11,6 @@ import projects.quiz.model.Assessment;
 import projects.quiz.model.Quiz;
 import projects.quiz.model.question.Question;
 import projects.quiz.repository.QuizRepository;
-import projects.quiz.utils.enums.PrivacyPolicy;
 import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
@@ -65,7 +64,8 @@ public class QuizService {
                 imageData,
                 quizCreateDto.getPrivacyPolicy(),
                 questions,
-                assessments
+                assessments,
+                new LinkedHashSet<>()
         ));
 
     }
@@ -174,6 +174,19 @@ public class QuizService {
                 );
 
         return assessments;
+    }
 
+    @Transactional
+    public Quiz addEditors(UUID uuid, Set<UUID> editors){
+        Quiz quiz = getByUuid(uuid);
+        quiz.getEditors().addAll(editors);
+        return save(quiz);
+    }
+
+    @Transactional
+    public Quiz removeEditors(UUID uuid, Set<UUID> editors){
+        Quiz quiz = getByUuid(uuid);
+        quiz.getEditors().removeAll(editors);
+        return save(quiz);
     }
 }

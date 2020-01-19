@@ -13,6 +13,7 @@ import projects.storage.model.FileData;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -50,6 +51,10 @@ public class Quiz extends AbstractBaseEntity<Long> {
     @ManyToMany
     @JoinColumn(name = "quiz_id")
     private Map<QuestionType, Assessment> assessments;
+
+    @NotNull(message = "editors.not_null")
+    private LinkedHashSet<UUID> editors = new LinkedHashSet<>();
+
 
     public void removeImage() {
         imageData = null;

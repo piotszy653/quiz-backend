@@ -18,6 +18,7 @@ import projects.quiz.service.ResultService;
 
 import javax.validation.Valid;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -61,6 +62,16 @@ public class QuizController {
     @ResponseStatus(HttpStatus.OK)
     public Quiz update(@Valid @RequestBody QuizUpdateDto quizUpdateDto, @Valid @QuizOwner @PathVariable UUID uuid) {
         return coreQuizService.update(quizUpdateDto, uuid);
+    }
+
+    @PutMapping("/{uuid}/add-editors/{uuidSet}")
+    public Quiz addEditors(@Valid @PathVariable @QuizOwner UUID uuid, @Valid @PathVariable Set<UUID> uuidSet){
+        return quizService.addEditors(uuid, uuidSet);
+    }
+
+    @PutMapping("/{uuid}/remove-editors/{uuidSet}")
+    public Quiz removeEditors(@Valid @PathVariable @QuizOwner UUID uuid, @Valid @PathVariable Set<UUID> uuidSet){
+        return quizService.removeEditors(uuid, uuidSet);
     }
 
     @Secured("ROLE_QUIZ_UPDATE")
