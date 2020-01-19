@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="Piotr Szymański (generated)" id="1579359570214-1">
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-1">
         <createTable tableName="invitation">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="invitationPK"/>
@@ -17,14 +17,37 @@
             <column name="inviting_user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1579359570214-2">
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-2">
+        <createTable tableName="user_profile">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="user_profilePK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-3">
+        <addColumn tableName="user">
+            <column name="profile_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-4">
+        <addUniqueConstraint columnNames="inviting_user_id, invited_user_id"
+                             constraintName="UKpc0p4p0cp07v6hyuslp5mxsar" tableName="invitation"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-5">
         <addForeignKeyConstraint baseColumnNames="invited_user_id" baseTableName="invitation"
                                  constraintName="FK8iiu758xa9wx533wctis7ldol" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Piotr Szymański (generated)" id="1579359570214-3">
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-6">
         <addForeignKeyConstraint baseColumnNames="inviting_user_id" baseTableName="invitation"
                                  constraintName="FKci4imng6m7docxjy2nf35mptf" deferrable="false"
                                  initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1579425883123-7">
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="user"
+                                 constraintName="FKij8iv0fayghyrvh4stseg9k9p" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
     </changeSet>
 </databaseChangeLog>

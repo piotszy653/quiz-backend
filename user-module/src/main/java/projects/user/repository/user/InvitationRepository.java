@@ -13,6 +13,8 @@ public interface InvitationRepository extends CrudRepository<Invitation, Long> {
 
     Optional<Invitation> findFirstByInvitingUser_UuidAndInvitedUser_Uuid(UUID invitingUserUuid, UUID invitedUserUuid);
 
+    boolean existsByInvitingUser_UuidAndInvitedUser_Uuid(UUID invitingUserUuid, UUID invitedUserUuid);
+
     LinkedHashSet<Invitation> findAllByInvitingUser_Uuid(UUID uuid);
 
     LinkedHashSet<Invitation> findAllByInvitedUser_Uuid(UUID uuid);

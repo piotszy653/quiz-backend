@@ -44,7 +44,6 @@ public class User extends AbstractBaseEntity<Long> implements UserDetails {
     @Column(nullable = false)
     private boolean enabled = false;
 
-    @JsonIgnore
     @Column(nullable = false)
     @NotNull(message = "{uuid.not_null}")
     @Type(type = "org.hibernate.type.PostgresUUIDType")

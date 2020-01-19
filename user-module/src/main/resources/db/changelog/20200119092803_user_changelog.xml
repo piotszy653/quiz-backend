@@ -2,8 +2,9 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="Piotr Szymański (generated)" id="1579361042999-1">
-        <addUniqueConstraint columnNames="inviting_user_id, invited_user_id"
-                             constraintName="UKpc0p4p0cp07v6hyuslp5mxsar" tableName="invitation"/>
+    <changeSet author="Piotr Szymański (generated)" id="1579426091316-1">
+        <addColumn tableName="user_profile">
+            <column name="friends" type="bytea"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

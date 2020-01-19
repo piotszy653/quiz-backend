@@ -80,6 +80,11 @@ public class UserController {
         return coreRateService.getAllByUser();
     }
 
+    @GetMapping("/friends")
+    public Set<User> getFriends(){
+        return userService.getFriends();
+    }
+
     @GetMapping("/invited-users")
     public Set<User> getInvitedUsers() {
         return invitationService.getInvitedUsers();

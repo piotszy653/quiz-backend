@@ -164,9 +164,13 @@ public class UserService implements UserDetailsService {
         User currentUser = getCurrentUser();
         User removedUser = findByUuid(uuid);
 
-        currentUser.getProfile().getFriends().remove(removedUser);
-        removedUser.getProfile().getFriends().remove(currentUser);
+        currentUser.getProfile().getFriends().remove(removedUser.getUuid());
+        removedUser.getProfile().getFriends().remove(currentUser.getUuid());
 
         saveAll(currentUser, removedUser);
+    }
+
+    public Set<User> getFriends() {
+        return getCurrentUser().getProfile().getFriends().stream().map(this::findByUuid).collect(Collectors.toSet());
     }
 }

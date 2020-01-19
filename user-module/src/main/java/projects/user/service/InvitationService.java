@@ -46,6 +46,10 @@ public class InvitationService {
                 .orElseThrow(() -> new NoSuchElementException(messageSource.getMessage("invitation.not_found", null, null)));
     }
 
+    public boolean existsByUsers(UUID invitingUserUuid, UUID invitedUserUuid){
+        return invitationRepository.existsByInvitingUser_UuidAndInvitedUser_Uuid(invitingUserUuid, invitedUserUuid);
+    }
+
     public LinkedHashSet<Invitation> getAllByInvitingUser(UUID uuid){
         return invitationRepository.findAllByInvitingUser_Uuid(uuid);
     }
@@ -76,10 +80,10 @@ public class InvitationService {
         User invitingUser = invitation.getInvitingUser();
         User invitedUser = invitation.getInvitedUser();
 
-        invitingUser.getProfile().getFriends().add(invitedUser);
-        invitedUser.getProfile().getFriends().add(invitingUser);
-
-        userService.saveAll(invitingUser, invitedUser);
+        invitingUser.getProfile().getFriends().add(invitedUser.getUuid());
+        userService.save(invitingUser);
+        invitedUser.getProfile().getFriends().add(invitingUser.getUuid());
+        userService.save(invitedUser);
         delete(invitation);
     }
 
