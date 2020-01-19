@@ -49,6 +49,12 @@ public class QuizController {
         return coreQuizService.getByOwner();
     }
 
+    @GetMapping("/available")
+    @ResponseStatus(HttpStatus.OK)
+    public LinkedHashSet<Quiz> getAvailable() {
+        return coreQuizService.getAvailable();
+    }
+
     @Secured("ROLE_QUIZ_CREATE")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

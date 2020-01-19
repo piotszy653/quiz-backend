@@ -11,11 +11,15 @@ import projects.quiz.model.Assessment;
 import projects.quiz.model.Quiz;
 import projects.quiz.model.question.Question;
 import projects.quiz.repository.QuizRepository;
+import projects.quiz.utils.enums.PrivacyPolicy;
 import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static projects.quiz.utils.enums.PrivacyPolicy.FRIENDS;
+import static projects.quiz.utils.enums.PrivacyPolicy.PUBLIC;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,6 +42,14 @@ public class QuizService {
 
     public LinkedHashSet<Quiz> getAllByOwner(UUID ownerUuid) {
         return quizRepository.findAllByOwnerUuid(ownerUuid);
+    }
+
+    public LinkedHashSet<Quiz> getAllPublic(){
+        return quizRepository.findAllByPrivacyPolicy(PUBLIC);
+    }
+
+    public LinkedHashSet<Quiz> getAllFriends(Set<UUID> friendsUuidSet){
+        return quizRepository.findAllByOwnerUuidInAndPrivacyPolicy(friendsUuidSet, FRIENDS);
     }
 
     @Transactional

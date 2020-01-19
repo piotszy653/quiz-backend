@@ -10,6 +10,7 @@ import projects.quiz.model.Quiz;
 import projects.quiz.service.QuizService;
 import projects.storage.model.FileData;
 import projects.storage.service.FileDataService;
+import projects.user.model.user.User;
 import projects.user.service.UserService;
 
 import java.util.HashMap;
@@ -32,6 +33,14 @@ public class CoreQuizService {
 
     private final FileDataService fileDataService;
 
+
+    public LinkedHashSet<Quiz> getAvailable() {
+        User user = userService.getCurrentUser();
+        LinkedHashSet<Quiz> quizzes = quizService.getAllByOwner(user.getUuid());
+        quizzes.addAll(quizService.getAllFriends(user.getProfile().getFriends()));
+        quizzes.addAll(quizService.getAllPublic());
+        return quizzes;
+    }
 
     public LinkedHashSet<Quiz> getByOwner() {
         return quizService.getAllByOwner(userService.getCurrentUserUuid());
