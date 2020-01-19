@@ -6,7 +6,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.service.quiz.CoreQuizService;
-import projects.core.service.quiz.CoreRateService;
 import projects.core.service.quiz.CoreResultService;
 import projects.core.utils.validator.quiz.QuizOwner;
 import projects.quiz.dto.quiz.QuizCreateDto;
@@ -15,10 +14,10 @@ import projects.quiz.model.Quiz;
 import projects.quiz.model.Result;
 import projects.quiz.service.QuizService;
 import projects.quiz.service.ResultService;
+import projects.core.utils.validator.quiz.QuizEditor;
 
 import javax.validation.Valid;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -60,7 +59,7 @@ public class QuizController {
     @Secured("ROLE_QUIZ_UPDATE")
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Quiz update(@Valid @RequestBody QuizUpdateDto quizUpdateDto, @Valid @QuizOwner @PathVariable UUID uuid) {
+    public Quiz update(@Valid @RequestBody QuizUpdateDto quizUpdateDto, @Valid @QuizEditor @PathVariable UUID uuid) {
         return coreQuizService.update(quizUpdateDto, uuid);
     }
 
@@ -77,7 +76,7 @@ public class QuizController {
     @Secured("ROLE_QUIZ_UPDATE")
     @PutMapping("/remove-image/{quizUuid}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeImage(@Valid @QuizOwner @PathVariable UUID quizUuid) {
+    public void removeImage(@Valid @QuizEditor @PathVariable UUID quizUuid) {
         quizService.removeImage(quizUuid);
     }
 

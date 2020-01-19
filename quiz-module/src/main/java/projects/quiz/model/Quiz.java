@@ -72,4 +72,8 @@ public class Quiz extends AbstractBaseEntity<Long> {
         return types;
     }
 
+    public boolean isEditor(UUID userUuid){
+        return ownerUuid.equals(userUuid) || editors.contains(userUuid);
+    }
+
 }
