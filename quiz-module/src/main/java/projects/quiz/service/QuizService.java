@@ -65,7 +65,8 @@ public class QuizService {
                 quizCreateDto.getPrivacyPolicy(),
                 questions,
                 assessments,
-                new LinkedHashSet<>()
+                new LinkedHashSet<>(),
+                quizCreateDto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new))
         ));
 
     }
@@ -82,6 +83,7 @@ public class QuizService {
 
         quiz.setImageData(imageData != null ? imageData : quiz.getImageData());
         quiz.setPrivacyPolicy(dto.getPrivacyPolicy() != null ? dto.getPrivacyPolicy() : quiz.getPrivacyPolicy());
+        quiz.setTags(dto.getTags() != null ? dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)) : quiz.getTags());
         quiz.getQuestions().removeAll(questionService.getAllByUuids(dto.getRemovedQuestionsUuids()));
         quiz.getQuestions().addAll(questionService.getAllByUuids(dto.getAddedQuestionsUuids()));
 
@@ -177,14 +179,14 @@ public class QuizService {
     }
 
     @Transactional
-    public Quiz addEditors(UUID uuid, Set<UUID> editors){
+    public Quiz addEditors(UUID uuid, Set<UUID> editors) {
         Quiz quiz = getByUuid(uuid);
         quiz.getEditors().addAll(editors);
         return save(quiz);
     }
 
     @Transactional
-    public Quiz removeEditors(UUID uuid, Set<UUID> editors){
+    public Quiz removeEditors(UUID uuid, Set<UUID> editors) {
         Quiz quiz = getByUuid(uuid);
         quiz.getEditors().removeAll(editors);
         return save(quiz);

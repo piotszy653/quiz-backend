@@ -21,6 +21,8 @@ public class QuizUpdateDto {
 
     private PrivacyPolicy privacyPolicy;
 
+    private LinkedHashSet<String> tags;
+
     @QuestionsExist
     private LinkedHashSet<UUID> addedQuestionsUuids = new LinkedHashSet<>();
 

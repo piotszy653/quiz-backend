@@ -53,7 +53,12 @@ public class Quiz extends AbstractBaseEntity<Long> {
     private Map<QuestionType, Assessment> assessments;
 
     @NotNull(message = "editors.not_null")
+    @Column(nullable = false)
     private LinkedHashSet<UUID> editors = new LinkedHashSet<>();
+
+    @NotNull(message = "tags.not_null")
+    @Column(nullable = false)
+    private LinkedHashSet<String> tags = new LinkedHashSet<>();
 
 
     public void removeImage() {

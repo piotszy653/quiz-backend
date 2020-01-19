@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
 import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
@@ -45,6 +46,10 @@ public class Question extends AbstractBaseEntity<Long> {
     @Enumerated(value = STRING)
     @Setter(AccessLevel.NONE)
     QuestionType type;
+
+    @NotNull(message = "tags.not_null")
+    @Column(nullable = false)
+    private LinkedHashSet<String> tags = new LinkedHashSet<>();
 
     public void removeImage(){
         imageData = null;

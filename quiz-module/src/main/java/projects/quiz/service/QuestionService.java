@@ -105,7 +105,7 @@ public class QuestionService {
 
         LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, answersCorrectness);
 
-        return saveTestQuestion(new TestQuestion(dto.getQuestion(), ownerUuid, imageData, answers, answersCorrectness, dto.getIsMultipleChoice()));
+        return saveTestQuestion(new TestQuestion(dto, ownerUuid, imageData, answers, answersCorrectness));
     }
 
     @Transactional
@@ -161,6 +161,7 @@ public class QuestionService {
     private void updateQuestion(Question question, QuestionUpdateDto dto, FileData imageData) {
         question.setQuestion(dto.getQuestion() != null ? dto.getQuestion() : question.getQuestion());
         question.setImageData(imageData != null ? imageData : question.getImageData());
+        question.setTags(dto.getTags() != null ? dto.getTags() : question.getTags());
     }
 
     @Transactional

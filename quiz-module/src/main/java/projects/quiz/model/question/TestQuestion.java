@@ -3,19 +3,22 @@ package projects.quiz.model.question;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.validation.annotation.Validated;
+import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
 import projects.quiz.model.Answer;
-import projects.quiz.utils.enums.QuestionType;
 import projects.storage.model.FileData;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static projects.quiz.utils.enums.QuestionType.TEST;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -33,11 +36,11 @@ public class TestQuestion extends Question {
     private boolean isMultipleChoice;
 
 
-    public TestQuestion(String question, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers, HashMap<UUID, Boolean> answersCorrectness, boolean isMultipleChoice) {
-        super(question, ownerUuid, imageData, QuestionType.TEST);
+    public TestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers, HashMap<UUID, Boolean> answersCorrectness) {
+        super(dto.getQuestion(), ownerUuid, imageData, TEST, dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)));
         this.answers = answers;
         this.answersCorrectness = answersCorrectness;
-        this.isMultipleChoice = isMultipleChoice;
+        this.isMultipleChoice = dto.getIsMultipleChoice();
     }
 
 }

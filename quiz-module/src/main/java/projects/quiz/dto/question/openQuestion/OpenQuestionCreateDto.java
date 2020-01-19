@@ -18,8 +18,4 @@ public class OpenQuestionCreateDto extends QuestionCreateDto {
     @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
-    public OpenQuestionCreateDto(String question, UUID imageUuid, String answer) {
-        super(question, imageUuid);
-        this.answer = answer;
-    }
 }

@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -18,4 +21,6 @@ public class QuestionCreateDto {
     private String question;
 
     private UUID imageUuid;
+
+    private LinkedHashSet<String> tags = new LinkedHashSet<>();
 }

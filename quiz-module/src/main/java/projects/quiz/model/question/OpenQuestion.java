@@ -10,7 +10,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static projects.quiz.utils.enums.QuestionType.OPEN;
 
@@ -25,13 +27,8 @@ public class OpenQuestion extends Question {
     @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
-    public OpenQuestion(String question, UUID ownerUuid, FileData imageData, String answer){
-        super(question, ownerUuid, imageData, OPEN);
-        this.answer = answer;
-    }
-
-    public OpenQuestion(OpenQuestionCreateDto dto, UUID ownerUuid, FileData imageData){
-        super(dto.getQuestion(), ownerUuid, imageData, OPEN);
+    public OpenQuestion(OpenQuestionCreateDto dto, UUID ownerUuid, FileData imageData) {
+        super(dto.getQuestion(), ownerUuid, imageData, OPEN, dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)));
         this.answer = dto.getAnswer();
     }
 

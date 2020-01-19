@@ -27,6 +27,8 @@ public class QuizCreateDto {
     @NotNull(message = "{privacy_policy.not_null}")
     private PrivacyPolicy privacyPolicy;
 
+    private LinkedHashSet<String> tags = new LinkedHashSet<>();
+
     private LinkedHashSet<@Valid OpenQuestionCreateDto> createdOpenQuestions = new LinkedHashSet<>();
     private LinkedHashSet<@Valid TrueFalseQuestionCreateDto> createdTrueFalseQuestions = new LinkedHashSet<>();
     private LinkedHashSet<@Valid TestQuestionCreateDto> createdTestQuestions = new LinkedHashSet<>();
