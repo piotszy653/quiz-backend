@@ -48,6 +48,10 @@ public class QuizService {
         return quizRepository.findAllByPrivacyPolicy(PUBLIC);
     }
 
+    public Set<Quiz> getAllByPrivacyAndOwner(PrivacyPolicy policy, UUID uuid) {
+        return quizRepository.findAllByPrivacyPolicyAndOwnerUuid(policy, uuid);
+    }
+
     public LinkedHashSet<Quiz> getAllFriends(Set<UUID> friendsUuidSet){
         return quizRepository.findAllByOwnerUuidInAndPrivacyPolicy(friendsUuidSet, FRIENDS);
     }

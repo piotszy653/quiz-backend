@@ -46,7 +46,7 @@ public class QuizController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public LinkedHashSet<Quiz> getByOwner() {
-        return coreQuizService.getByOwner();
+        return coreQuizService.getAllByCurrentUser();
     }
 
     @GetMapping("/available")

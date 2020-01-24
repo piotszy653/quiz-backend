@@ -8,21 +8,21 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import projects.core.dto.user.CoreUserUpdateDto;
+import projects.core.service.quiz.CoreQuizService;
 import projects.core.service.quiz.CoreRateService;
 import projects.core.service.user.CoreUserService;
-import projects.core.utils.validator.user.CurrentUserHasRole;
+import projects.quiz.model.Quiz;
 import projects.quiz.model.Rate;
 import projects.user.dto.user.UserCreateDto;
 import projects.user.model.user.User;
 import projects.user.service.InvitationService;
 import projects.user.service.UserService;
+import projects.user.utils.validator.UserExists;
 import projects.user.utils.validator.currentUser.CurrentUser;
 
 import javax.validation.Valid;
 import java.util.Set;
 import java.util.UUID;
-
-import static projects.core.config.enums.roles.RolesEnum.ADMIN;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +37,8 @@ public class UserController {
     private final CoreRateService coreRateService;
 
     private final InvitationService invitationService;
+
+    private final CoreQuizService coreQuizService;
 
     @Secured("ROLE_USER_READ")
     @GetMapping
@@ -99,4 +101,9 @@ public class UserController {
         userService.removeFriend(uuid);
     }
 
+
+    @GetMapping("/available-quizzes/{uuid}")
+    public Set<Quiz> getQuizzesByOwnerUuid(@Valid @PathVariable @UserExists UUID uuid){
+        return coreQuizService.getAvailableByOwnerUuid(uuid);
+    }
 }

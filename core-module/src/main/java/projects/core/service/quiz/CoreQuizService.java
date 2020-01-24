@@ -13,11 +13,11 @@ import projects.storage.service.FileDataService;
 import projects.user.model.user.User;
 import projects.user.service.UserService;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static projects.quiz.utils.enums.PrivacyPolicy.FRIENDS;
+import static projects.quiz.utils.enums.PrivacyPolicy.PUBLIC;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,8 +42,16 @@ public class CoreQuizService {
         return quizzes;
     }
 
-    public LinkedHashSet<Quiz> getByOwner() {
+    public LinkedHashSet<Quiz> getAllByCurrentUser() {
         return quizService.getAllByOwner(userService.getCurrentUserUuid());
+    }
+
+    public Set<Quiz> getAvailableByOwnerUuid(UUID uuid) {
+        Set<Quiz> quizzes = quizService.getAllByPrivacyAndOwner(PUBLIC, uuid);
+        if(userService.findByUuid(uuid).getProfile().getFriends().contains(userService.getCurrentUserUuid())){
+            quizzes.addAll(quizService.getAllByPrivacyAndOwner(FRIENDS, uuid));
+        }
+        return quizzes;
     }
 
     @Transactional

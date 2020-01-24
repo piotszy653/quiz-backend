@@ -21,6 +21,8 @@ public interface QuizRepository extends PagingAndSortingRepository<Quiz, Long> {
 
     LinkedHashSet<Quiz> findAllByPrivacyPolicy(PrivacyPolicy policy);
 
+    LinkedHashSet<Quiz> findAllByPrivacyPolicyAndOwnerUuid(PrivacyPolicy policy, UUID ownerUuid);
+
     LinkedHashSet<Quiz> findAllByOwnerUuidInAndPrivacyPolicy(Collection<UUID> uuids, PrivacyPolicy policy);
 
     void deleteByUuid(UUID uuid);
