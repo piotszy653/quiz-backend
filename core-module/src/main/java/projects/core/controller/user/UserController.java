@@ -21,6 +21,7 @@ import projects.user.utils.validator.UserExists;
 import projects.user.utils.validator.currentUser.CurrentUser;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,8 +44,8 @@ public class UserController {
     @Secured("ROLE_USER_READ")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<User> getAll(Pageable pageable) {
-        return userService.findAll(pageable);
+    public List<User> getAll() {
+        return userService.findAll();
     }
 
     @Secured("ROLE_USER_CREATE")
