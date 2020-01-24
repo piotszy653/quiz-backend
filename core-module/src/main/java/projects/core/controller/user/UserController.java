@@ -40,7 +40,6 @@ public class UserController {
 
     @Secured("ROLE_USER_READ")
     @GetMapping
-    @CurrentUserHasRole(roles = {ADMIN})
     @ResponseStatus(HttpStatus.OK)
     public Page<User> getAll(Pageable pageable) {
         return userService.findAll(pageable);
