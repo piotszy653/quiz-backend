@@ -52,8 +52,8 @@ public class Assessment extends AbstractBaseEntity<Long> implements AssessmentDt
         this.name = dto.getName();
         this.correctRate = new BigDecimal(dto.getCorrectRate());
         this.incorrectRate = new BigDecimal(dto.getIncorrectRate());
-        this.minPoints = new BigDecimal(dto.getMinPoints());
-        this.maxPoints = new BigDecimal(dto.getMaxPoints());
+        this.minPoints = dto.getMinPoints() != null ? new BigDecimal(dto.getMinPoints()) : null;
+        this.maxPoints = dto.getMaxPoints() != null ? new BigDecimal(dto.getMaxPoints()) : null;
 
     }
 
