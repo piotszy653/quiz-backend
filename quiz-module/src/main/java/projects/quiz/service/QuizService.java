@@ -76,6 +76,7 @@ public class QuizService {
         HashMap<QuestionType, Assessment> assessments = getAssessments(quizCreateDto.getAssessmentsUuids());
 
         return save(new Quiz(
+                quizCreateDto.getName(),
                 ownerUuid,
                 imageData,
                 quizCreateDto.getPrivacyPolicy(),
@@ -97,6 +98,7 @@ public class QuizService {
 
         Quiz quiz = getByUuid(uuid);
 
+        quiz.setName(dto.getName() != null ? dto.getName() : quiz.getName());
         quiz.setImageData(imageData != null ? imageData : quiz.getImageData());
         quiz.setPrivacyPolicy(dto.getPrivacyPolicy() != null ? dto.getPrivacyPolicy() : quiz.getPrivacyPolicy());
         quiz.setTags(dto.getTags() != null ? dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)) : quiz.getTags());

@@ -13,6 +13,7 @@ import projects.storage.model.FileData;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +31,10 @@ import static javax.persistence.FetchType.EAGER;
 @Data
 @QuestionTypesAssessmentsMatch
 public class Quiz extends AbstractBaseEntity<Long> {
+
+    @NotNull(message = "name.not_null")
+    @Size(max = 255, message = "name.max:255")
+    private String name;
 
     @NotNull(message = "{owner_uuid.not_null}")
     @Column(nullable = false)

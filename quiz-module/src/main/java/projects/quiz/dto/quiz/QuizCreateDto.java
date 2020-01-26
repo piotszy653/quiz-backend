@@ -13,6 +13,7 @@ import projects.quiz.utils.validator.question.QuestionsExist;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.UUID;
@@ -21,6 +22,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizCreateDto {
+
+    @NotNull(message = "name.not_null")
+    @Size(max = 255, message = "name.max:255")
+    private String name;
 
     private UUID imageUuid;
 

@@ -17,6 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class QuizUpdateDto {
 
+    private String name;
+
     private UUID imageUuid;
 
     private PrivacyPolicy privacyPolicy;
