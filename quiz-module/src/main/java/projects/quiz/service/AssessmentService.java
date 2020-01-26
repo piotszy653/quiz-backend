@@ -78,8 +78,8 @@ public class AssessmentService {
         assessment.setName(dto.getName() != null ? dto.getName() : assessment.getName());
         assessment.setCorrectRate(dto.getCorrectRate() != null ? new BigDecimal(dto.getCorrectRate()) : assessment.getCorrectRateBigDecimal());
         assessment.setIncorrectRate(dto.getIncorrectRate() != null ? new BigDecimal(dto.getIncorrectRate()) : assessment.getIncorrectRateBigDecimal());
-        assessment.setMinPoints(dto.getMinPoints() != null ? new BigDecimal(dto.getMinPoints()) : assessment.getMinPointsBigDecimal());
-        assessment.setMaxPoints(dto.getMaxPoints() != null ? new BigDecimal(dto.getMaxPoints()) : assessment.getMaxPointsBigDecimal());
+        assessment.setMinPoints(dto.getMinPoints() != null ? new BigDecimal(dto.getMinPoints()) : null);
+        assessment.setMaxPoints(dto.getMaxPoints() != null ? new BigDecimal(dto.getMaxPoints()) : null);
 
         return assessment;
     }
