@@ -32,6 +32,7 @@ import static javax.persistence.FetchType.EAGER;
 @QuestionTypesAssessmentsMatch
 public class Quiz extends AbstractBaseEntity<Long> {
 
+    @Column(nullable = false)
     @NotNull(message = "name.not_null")
     @Size(max = 255, message = "name.max:255")
     private String name;
