@@ -56,10 +56,10 @@ public class UserController {
     }
 
     @Secured("ROLE_USER_READ")
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@CurrentUser @PathVariable long id) {
-        return userService.findOne(id);
+    public User getUser(@PathVariable UUID uuid) {
+        return userService.findByUuid(uuid);
     }
 
     @Secured("ROLE_USER_UPDATE")
