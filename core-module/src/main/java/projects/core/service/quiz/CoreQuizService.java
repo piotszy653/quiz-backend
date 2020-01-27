@@ -76,6 +76,7 @@ public class CoreQuizService {
         return quizService.create(
                 dto,
                 userService.getCurrentUserUuid(),
+                userService.getCurrentUser().getUsername(),
                 fileDataService.getImageDataByUuid(dto.getImageUuid()),
                 openQuestionsImages,
                 trueFalseQuestionsImages,

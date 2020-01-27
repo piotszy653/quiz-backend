@@ -57,7 +57,7 @@ public class QuizService {
     }
 
     @Transactional
-    public Quiz create(QuizCreateDto quizCreateDto, UUID ownerUuid, FileData imageData,
+    public Quiz create(QuizCreateDto quizCreateDto, UUID ownerUuid, String ownerUsername, FileData imageData,
                        LinkedList<FileData> openQuestionsImages, LinkedList<FileData> trueFalseQuestionsImages,
                        LinkedList<FileData> testQuestionsImages, LinkedList<HashMap<UUID, FileData>> testAnswersImageUuidDataMap) {
 
@@ -78,6 +78,7 @@ public class QuizService {
         return save(new Quiz(
                 quizCreateDto.getName(),
                 ownerUuid,
+                ownerUsername,
                 imageData,
                 quizCreateDto.getPrivacyPolicy(),
                 questions,

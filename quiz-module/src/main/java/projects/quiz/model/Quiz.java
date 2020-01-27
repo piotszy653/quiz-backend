@@ -42,6 +42,11 @@ public class Quiz extends AbstractBaseEntity<Long> {
     @Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID ownerUuid;
 
+    @Column(nullable = false)
+    @NotNull(message = "owner_username.not_null")
+    @Size(max = 255, message = "owner_username.max:255")
+    private String ownerUsername;
+
     @ManyToOne(fetch = EAGER)
     private FileData imageData;
 
