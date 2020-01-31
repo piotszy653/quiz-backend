@@ -5,7 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.quiz.dto.answer.TestAnswerDto;
+import projects.quiz.dto.answer.AnswerDto;
 import projects.quiz.dto.question.QuestionUpdateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionUpdateDto;
@@ -222,21 +222,19 @@ public class QuestionService {
         return new NoSuchElementException(messageSource.getMessage("question.not_found.uuid", new Object[]{uuid}, null));
     }
 
-    private HashMap<UUID, Boolean> getAnswersCorrectness(HashMap<String, Boolean> answers){
+    private HashMap<UUID, Boolean> getAnswersCorrectness(HashMap<String, Boolean> answers) {
 
         HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
         answers.keySet().forEach(uuid -> answersCorrectness.put(UUID.fromString(uuid), answers.get(uuid)));
         return answersCorrectness;
     }
 
-    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<UUID, FileData> imageUuidDataMap) {
-        return testAnswerDtoSet.stream().map(testAnswerDto -> {
-            Answer answer = answerService.create(
-                    testAnswerDto.getAnswerDto(),
-                    imageUuidDataMap.get(testAnswerDto.getAnswerDto().getImageUuid())
-            );
-            return answer;
-        }).collect(Collectors.toCollection(LinkedHashSet::new));
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<AnswerDto> testAnswerDtoSet, HashMap<UUID, FileData> imageUuidDataMap) {
+        return testAnswerDtoSet.stream().map(answerDto ->
+                answerService.create(
+                        answerDto,
+                        imageUuidDataMap.get(answerDto.getImageUuid())
+                )).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private void removeAnswers(TestQuestion question, TestQuestionUpdateDto dto) {

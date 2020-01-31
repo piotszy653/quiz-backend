@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import projects.quiz.dto.answer.TestAnswerDto;
+import projects.quiz.dto.answer.AnswerDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionCreateDto;
 import projects.quiz.dto.question.openQuestion.OpenQuestionUpdateDto;
 import projects.quiz.dto.question.testQuestion.TestQuestionCreateDto;
@@ -93,9 +93,9 @@ public class CoreQuestionService {
         );
     }
 
-    public HashMap<UUID, FileData> getAnswersImageUuidDataMap(LinkedHashSet<TestAnswerDto> answers){
+    public HashMap<UUID, FileData> getAnswersImageUuidDataMap(LinkedHashSet<AnswerDto> answers){
         Set<UUID> imageUuids = answers.stream()
-                .map(testAnswerDto -> testAnswerDto.getAnswerDto().getImageUuid())
+                .map(AnswerDto::getImageUuid)
                 .collect(Collectors.toSet());
         imageUuids.remove(null);
         HashMap<UUID, FileData> imageUuidDataMap = new HashMap<>();
