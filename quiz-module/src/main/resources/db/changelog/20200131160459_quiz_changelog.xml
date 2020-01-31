@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Piotr Szymański (generated)" id="1580486709351-1">
+        <addColumn tableName="answer">
+            <column name="correct" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Piotr Szymański (generated)" id="1580486709351-22">
+        <dropColumn columnName="answers_correctness" tableName="test_question"/>
+    </changeSet>
+</databaseChangeLog>

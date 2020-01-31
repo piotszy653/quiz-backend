@@ -20,8 +20,6 @@ public class TestQuestionUpdateDto extends QuestionUpdateDto {
 
     private LinkedHashSet<UUID> removedAnswersUuids = new LinkedHashSet<>();
 
-    private HashMap<UUID, Boolean> updatedAnswersCorrectness = new HashMap<>();
-
     private Boolean isMultipleChoice;
 
 }

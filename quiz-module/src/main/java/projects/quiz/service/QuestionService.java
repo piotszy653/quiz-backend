@@ -101,11 +101,10 @@ public class QuestionService {
     @Transactional
     public TestQuestion createTestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, HashMap<UUID, FileData> answerImageUuidDataMap) {
 
-        HashMap<UUID, Boolean> answersCorrectness = new HashMap<>();
 
-        LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, answersCorrectness);
+        LinkedHashSet<Answer> answers = createAnswers(dto.getAnswers(), answerImageUuidDataMap);
 
-        return saveTestQuestion(new TestQuestion(dto, ownerUuid, imageData, answers, answersCorrectness));
+        return saveTestQuestion(new TestQuestion(dto, ownerUuid, imageData, answers));
     }
 
     @Transactional
@@ -145,13 +144,10 @@ public class QuestionService {
         TestQuestion question = getTestQuestionByUuid(uuid);
         updateQuestion(question, dto, imageData);
 
-        HashMap<UUID, Boolean> newAnswersCorrectness = new HashMap<>();
-        LinkedHashSet<Answer> newAnswers = createAnswers(dto.getAnswers(), answerImageUuidDataMap, newAnswersCorrectness);
+        LinkedHashSet<Answer> newAnswers = createAnswers(dto.getAnswers(), answerImageUuidDataMap);
         question.getAnswers().addAll(newAnswers);
-        question.getAnswersCorrectness().putAll(newAnswersCorrectness);
 
         removeAnswers(question, dto);
-        updateAnswersCorrectness(question, dto);
 
         question.setMultipleChoice(dto.getIsMultipleChoice() != null ? dto.getIsMultipleChoice() : question.isMultipleChoice());
 
@@ -233,13 +229,12 @@ public class QuestionService {
         return answersCorrectness;
     }
 
-    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<UUID, FileData> imageUuidDataMap, HashMap<UUID, Boolean> answersCorrectness) {
+    private LinkedHashSet<Answer> createAnswers(LinkedHashSet<TestAnswerDto> testAnswerDtoSet, HashMap<UUID, FileData> imageUuidDataMap) {
         return testAnswerDtoSet.stream().map(testAnswerDto -> {
             Answer answer = answerService.create(
                     testAnswerDto.getAnswerDto(),
                     imageUuidDataMap.get(testAnswerDto.getAnswerDto().getImageUuid())
             );
-            answersCorrectness.put(answer.getUuid(), testAnswerDto.getIsCorrect());
             return answer;
         }).collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -249,16 +244,5 @@ public class QuestionService {
         LinkedHashSet<Answer> answersToRemove = answerService.getAllByUuids(dto.getRemovedAnswersUuids());
         question.getAnswers().removeAll(answersToRemove);
         answerService.deleteAll(answersToRemove);
-        answersToRemove.forEach(answer -> question.getAnswersCorrectness().remove(answer.getUuid()));
-    }
-
-    private void updateAnswersCorrectness(TestQuestion question, TestQuestionUpdateDto dto){
-        dto.getUpdatedAnswersCorrectness().keySet().forEach(uuid ->
-                question.getAnswersCorrectness().replace(
-                        uuid,
-                        dto.getUpdatedAnswersCorrectness().get(uuid)
-                )
-        );
-
     }
 }

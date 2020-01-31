@@ -31,11 +31,15 @@ public class Answer extends AbstractBaseEntity<Long>{
     @Size(max = 1000, message = "answer.max:1000")
     private String answer;
 
+    @Column(nullable = false)
+    private boolean correct;
+
     @ManyToOne(fetch = EAGER)
     FileData imageData;
 
     public Answer(AnswerDto dto, FileData imageData){
         this.answer = dto.getAnswer();
+        this.correct = dto.isCorrect();
         this.imageData = imageData;
     }
 }

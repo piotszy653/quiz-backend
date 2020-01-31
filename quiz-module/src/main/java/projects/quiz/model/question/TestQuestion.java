@@ -31,15 +31,13 @@ public class TestQuestion extends Question {
     @NotNull(message = "{answers.not_null}")
     private Set<Answer> answers;
 
-    private HashMap<UUID, Boolean> answersCorrectness;
 
     private boolean isMultipleChoice;
 
 
-    public TestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers, HashMap<UUID, Boolean> answersCorrectness) {
+    public TestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers) {
         super(dto.getQuestion(), ownerUuid, imageData, TEST, dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)));
         this.answers = answers;
-        this.answersCorrectness = answersCorrectness;
         this.isMultipleChoice = dto.getIsMultipleChoice();
     }
 

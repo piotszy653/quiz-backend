@@ -1,5 +1,6 @@
 package projects.quiz.utils;
 
+import projects.quiz.model.Answer;
 import projects.quiz.model.Assessment;
 import projects.quiz.model.Quiz;
 import projects.quiz.model.question.TestQuestion;
@@ -47,7 +48,11 @@ public class ResultHelper {
             if (question.isPresent() && pickedAnswers != null) {
                 Float testPoints = 0.0f;
                 for (UUID answerUuid : pickedAnswers)
-                    testPoints += question.get().getAnswersCorrectness().get(answerUuid) ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate();
+                    testPoints += question.get().getAnswers()
+                            .stream()
+                            .filter(answer -> answer.getUuid().equals(answerUuid))
+                            .findFirst()
+                            .get().isCorrect() ? testAssessment.getCorrectRate() : testAssessment.getIncorrectRate();
                 points = points.add(cutPoints(testPoints, testAssessment));
             }
         }
