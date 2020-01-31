@@ -149,7 +149,7 @@ public class QuestionService {
 
         removeAnswers(question, dto);
 
-        question.setMultipleChoice(dto.getIsMultipleChoice() != null ? dto.getIsMultipleChoice() : question.isMultipleChoice());
+        question.setMultipleChoice(dto.getMultipleChoice() != null ? dto.getMultipleChoice() : question.isMultipleChoice());
 
         return saveTestQuestion(question);
     }

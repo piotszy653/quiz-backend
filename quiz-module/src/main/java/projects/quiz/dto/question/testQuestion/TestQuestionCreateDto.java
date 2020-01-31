@@ -16,7 +16,7 @@ public class TestQuestionCreateDto extends QuestionCreateDto {
 
     private LinkedHashSet<AnswerDto> answers = new LinkedHashSet<>();
 
-    @NotNull(message = "{is_multiple_choice.not_null}")
-    private Boolean isMultipleChoice;
+    @NotNull(message = "{multiple_choice.not_null}")
+    private Boolean multipleChoice;
 
 }

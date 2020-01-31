@@ -15,8 +15,4 @@ public class AnswerDto {
     private boolean correct;
 
     private UUID imageUuid;
-
-    @NotNull(message = "{is_correct.not_null}")
-    private Boolean isCorrect;
-
 }

@@ -18,6 +18,6 @@ public class TestQuestionUpdateDto extends QuestionUpdateDto {
 
     private LinkedHashSet<UUID> removedAnswersUuids = new LinkedHashSet<>();
 
-    private Boolean isMultipleChoice;
+    private Boolean multipleChoice;
 
 }

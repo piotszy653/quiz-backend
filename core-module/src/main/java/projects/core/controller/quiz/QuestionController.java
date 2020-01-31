@@ -84,7 +84,6 @@ public class QuestionController {
         return coreQuestionService.updateTrueFalseQuestion(trueFalseQuestionUpdateDto, uuid);
     }
 
-    @PreAuthorize("hasRole('QUESTION_UPDATE') AND hasRole('ANSWER_CREATE')")
     @PutMapping("/test/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public TestQuestion updateTestQuestion(@Valid @RequestBody TestQuestionUpdateDto testQuestionUpdateDto, @Valid @QuestionOwner @PathVariable UUID uuid) {

@@ -38,7 +38,7 @@ public class TestQuestion extends Question {
     public TestQuestion(TestQuestionCreateDto dto, UUID ownerUuid, FileData imageData, LinkedHashSet<Answer> answers) {
         super(dto.getQuestion(), ownerUuid, imageData, TEST, dto.getTags().stream().map(tag -> tag.trim().toLowerCase()).collect(Collectors.toCollection(LinkedHashSet::new)));
         this.answers = answers;
-        this.isMultipleChoice = dto.getIsMultipleChoice();
+        this.isMultipleChoice = dto.getMultipleChoice();
     }
 
 }
