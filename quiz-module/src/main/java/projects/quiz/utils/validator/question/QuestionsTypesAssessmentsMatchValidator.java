@@ -11,7 +11,10 @@ public class QuestionsTypesAssessmentsMatchValidator implements ConstraintValida
 
     @Override
     public boolean isValid(Quiz quiz, ConstraintValidatorContext constraintValidatorContext) {
+        return isValid(quiz);
+    }
 
+    public static boolean isValid(Quiz quiz){
         Set<QuestionType> types = quiz.getQuestionTypes();
         types.remove(QuestionType.OPEN);
 

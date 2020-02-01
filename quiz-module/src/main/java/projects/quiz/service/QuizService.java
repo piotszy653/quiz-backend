@@ -13,8 +13,10 @@ import projects.quiz.model.question.Question;
 import projects.quiz.repository.QuizRepository;
 import projects.quiz.utils.enums.PrivacyPolicy;
 import projects.quiz.utils.enums.QuestionType;
+import projects.quiz.utils.validator.question.QuestionsTypesAssessmentsMatchValidator;
 import projects.storage.model.FileData;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,7 +92,7 @@ public class QuizService {
     }
 
     @Transactional
-    public Quiz save(Quiz quiz) {
+    public Quiz save(@Valid Quiz quiz) {
         return quizRepository.save(quiz);
     }
 
@@ -121,6 +123,7 @@ public class QuizService {
                                 );
                 });
 
+        QuestionsTypesAssessmentsMatchValidator.isValid(quiz);
         return save(quiz);
     }
 
