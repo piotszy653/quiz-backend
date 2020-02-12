@@ -15,6 +15,7 @@ import projects.user.dto.registration.LoginResponseDto;
 import projects.user.dto.registration.RegistrationDto;
 import projects.user.model.user.User;
 import projects.user.model.user.UserProfile;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.security.model.UserContext;
 import projects.user.security.model.token.AccessJwtToken;
 import projects.user.security.model.token.JwtTokenFactory;
@@ -39,6 +40,9 @@ public class RegistrationServiceTest implements IRegistrationData, IUserData, IR
     UserService userService;
 
     @Mock
+    UserProfileRepository userProfileRepository;
+
+    @Mock
     RoleGroupService roleGroupService;
 
     @Mock
@@ -49,7 +53,6 @@ public class RegistrationServiceTest implements IRegistrationData, IUserData, IR
 
     @Mock
     JwtTokenFactory tokenFactory;
-
 
 
     private UserProfile defaultProfile = new UserProfile(null);

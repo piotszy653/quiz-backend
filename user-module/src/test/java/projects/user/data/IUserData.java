@@ -22,7 +22,7 @@ public interface IUserData {
     }
 
     default UserCreateDto getDefaultUserCreateDto(RoleGroup roleGroup) {
-        return new UserCreateDto(getDefaultUsername(), null, getDefaultPassword(), true, roleGroup.getName());
+        return new UserCreateDto(getDefaultUsername(), "name", getDefaultPassword(), true, roleGroup.getName());
     }
 
     default UserUpdateDto getDefaultUserUpdateDto(RoleGroup roleGroup) {

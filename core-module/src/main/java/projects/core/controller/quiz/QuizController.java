@@ -38,7 +38,7 @@ public class QuizController {
     @Secured("ROLE_QUIZ_READ")
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Quiz getByUuid(@Valid @QuizOwner @PathVariable UUID uuid) {
+    public Quiz getByUuid(@Valid @PathVariable UUID uuid) {
         return quizService.getByUuid(uuid);
     }
 

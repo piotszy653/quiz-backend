@@ -20,6 +20,7 @@ import projects.user.dto.user.UserCreateDto;
 import projects.user.dto.user.UserUpdateDto;
 import projects.user.model.user.User;
 import projects.user.model.user.UserProfile;
+import projects.user.repository.user.UserProfileRepository;
 import projects.user.repository.user.UserRepository;
 import projects.user.security.model.UserContext;
 import projects.user.service.RoleGroupService;
@@ -42,6 +43,9 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    UserProfileRepository userProfileRepository;
 
     @Mock
     RoleGroupService roleGroupService;
@@ -220,7 +224,7 @@ public class UserServiceTest implements IUserData, IRoleGroupData, IPageRequestD
         userService.currentUserValidation(1L);
 
         //then
-        verify(userRepository, times(1)).findByUsername(user.getUsername());
+        verify(userRepository, times(2)).findByUsername(user.getUsername());
     }
 
     @Test(expected = IllegalArgumentException.class)
