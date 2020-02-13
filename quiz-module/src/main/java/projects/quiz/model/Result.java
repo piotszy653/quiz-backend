@@ -21,8 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static projects.quiz.utils.ResultHelper.calcTestPoints;
-import static projects.quiz.utils.ResultHelper.calcTrueFalsePoints;
+import static projects.quiz.utils.ResultHelper.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -58,6 +57,10 @@ public class Result extends AbstractBaseEntity<Long> {
                         testAnswers.get(questionUuid)
                 )
         );
+    }
+
+    public float getMaxPoints(){
+        return calcMaxPoints(quiz);
     }
 
     public float getPoints() {
